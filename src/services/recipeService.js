@@ -46,3 +46,5 @@ export const getPostByUserId = async (userId) => {
     `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealCategories`
   ).then((res) => res.json());
 };
+
+// favorites will need to be handled a little differently, since they will be booleans instead of a bridge table
