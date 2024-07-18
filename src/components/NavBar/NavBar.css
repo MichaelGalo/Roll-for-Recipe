@@ -1,0 +1,29 @@
+.navbar {
+  background-color: #283618 !important;
+  color: #fefae0;
+}
+
+.nav-link {
+  color: #fefae0 !important;
+}
+
+.nav-link:hover {
+  color: #ffc107 !important;
+}
+
+.navbar-brand {
+  color: #fefae0 !important;
+  font-size: 1.5rem;
+}
+
+.navbar-brand:hover {
+  color: #ffc107 !important;
+}
+
+.container {
+  padding: 0.5rem 1rem;
+}
+
+.nav-link.logout:hover {
+  color: #bc6c25 !important;
+}

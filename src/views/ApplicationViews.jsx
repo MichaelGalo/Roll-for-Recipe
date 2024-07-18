@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { Welcome } from "../components/Welcome/Welcome";
 import { NavBar } from "../components/NavBar/NavBar";
+import { AllRecipesList } from "../components/AllRecipes/AllRecipesList";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -26,7 +27,10 @@ export const ApplicationViews = () => {
         }
       >
         <Route index element={<Welcome />} />
-        <Route path="all-recipes" element={<div>All Recipes</div>} />
+        <Route
+          path="all-recipes"
+          element={<AllRecipesList currentUser={currentUser} />}
+        />
         <Route
           path="recipe-details/:recipeId"
           element={<div>Recipe Details</div>}
@@ -44,9 +48,7 @@ export const ApplicationViews = () => {
   );
 };
 
-// Here are the Routes I Need
-
-// All Recipes
+// TODO:  All Recipes
 // Recipe Details
 // New Recipe
 // My Recipes
@@ -56,5 +58,3 @@ export const ApplicationViews = () => {
 // Edit Profile
 // Roll for Recipe
 // Shopping List
-
-// TODO: NavBar
