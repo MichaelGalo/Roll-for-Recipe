@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { Welcome } from "../components/Welcome/Welcome";
+import { NavBar } from "../components/NavBar/NavBar";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -19,7 +20,7 @@ export const ApplicationViews = () => {
         path="/"
         element={
           <>
-            {<div>A Navbar with passed currentUser will be here</div>}
+            {<NavBar currentUser={currentUser} />}
             <Outlet />
           </>
         }
