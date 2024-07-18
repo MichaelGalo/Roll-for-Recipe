@@ -14,7 +14,7 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
 
 1. **Create an account**
    - Given the unauthorized user wants to access the application
-   - When the unauthorized user loads the site initially, clicks on the "create account" and enters in log-in info (name & password)
+   - When the unauthorized user loads the site initially, clicks on the "create account" and enters in log-in info (name & email)
    - Then the page will automatically redirect to the enter profile details page, then after that save to the home splash page
 
 ### Authorized User
@@ -22,7 +22,7 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
 1. **Log in**
 
    - Given the authorized user wants to access the application
-   - When the authorized user loads the site initially and enters in log-in info (name & password)
+   - When the authorized user loads the site initially and enters in log-in info (name & email)
    - Then the page will automatically redirect to the home splash page
 
 2. **View profile details**
