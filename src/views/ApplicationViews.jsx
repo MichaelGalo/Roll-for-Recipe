@@ -8,6 +8,7 @@ import { NavBar } from "../components/NavBar/NavBar";
 import { AllRecipesList } from "../components/AllRecipes/AllRecipesList";
 import { NewRecipe } from "../components/NewRecipe/NewRecipe";
 import { MyRecipes } from "../components/MyRecipes/MyRecipes";
+import { RecipeDetails } from "../components/RecipeDetails/RecipeDetails";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -35,7 +36,7 @@ export const ApplicationViews = () => {
         />
         <Route
           path="recipe-details/:recipeId"
-          element={<div>Recipe Details</div>}
+          element={<RecipeDetails currentUser={currentUser} />}
         />
         <Route
           path="new-recipe"
@@ -56,9 +57,9 @@ export const ApplicationViews = () => {
   );
 };
 
-// TODO:  My Recipes
+// TODO:  Recipe Details
 //
-// Recipe Details
+//
 // Edit Recipe
 // Favorites
 // Profile

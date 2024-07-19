@@ -7,7 +7,7 @@ export const getAllRecipes = async () => {
 
 export const getRecipeById = async (id) => {
   return await fetch(
-    `http://localhost:8088/recipes/${id}?_expand=user&_expand=mealTypes`
+    `http://localhost:8088/recipes/${id}?_expand=user&_expand=mealType`
   ).then((res) => res.json());
 };
 
