@@ -45,7 +45,7 @@ export const AllRecipes = ({
             <p>
               Cuisine:{" "}
               <span style={{ fontWeight: "bold" }}>
-                {getMealCategoryName(recipe.categoryId)}
+                {getMealCategoryName(recipe.mealTypeId)}
               </span>
             </p>
             <p>

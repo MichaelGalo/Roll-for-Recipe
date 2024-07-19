@@ -7,6 +7,7 @@ import { Welcome } from "../components/Welcome/Welcome";
 import { NavBar } from "../components/NavBar/NavBar";
 import { AllRecipesList } from "../components/AllRecipes/AllRecipesList";
 import { NewRecipe } from "../components/NewRecipe/NewRecipe";
+import { MyRecipes } from "../components/MyRecipes/MyRecipes";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -40,7 +41,10 @@ export const ApplicationViews = () => {
           path="new-recipe"
           element={<NewRecipe currentUser={currentUser} />}
         />
-        <Route path="my-recipes" element={<div>My Recipes</div>} />
+        <Route
+          path="my-recipes"
+          element={<MyRecipes currentUser={currentUser} />}
+        />
         <Route path="edit-recipe/:recipeId" element={<div>Edit Recipe</div>} />
         <Route path="favorites" element={<div>Favorites</div>} />
         <Route path="profile/:userId" element={<div>Profile</div>} />
@@ -52,10 +56,9 @@ export const ApplicationViews = () => {
   );
 };
 
-// TODO:  New Recipe
+// TODO:  My Recipes
 //
 // Recipe Details
-// My Recipes
 // Edit Recipe
 // Favorites
 // Profile

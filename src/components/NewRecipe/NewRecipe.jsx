@@ -27,14 +27,19 @@ export const NewRecipe = ({ currentUser }) => {
   }, []);
 
   const handleSave = () => {
+    const formattedBody = body
+      .split("\n") // preserves the line break each time someone hits enter
+      .map((line) => line.trim()) // removes any extra white space
+      .join("\n"); // joins the lines back together with a line break
+
     // create new recipe object to be able to post
     const newRecipe = {
       title,
-      body,
-      categoryId: parseInt(selectedCategory),
+      body: formattedBody, // Use the formatted body
+      mealTypeId: parseInt(selectedCategory),
       userId: currentUser.id,
       authorFavorite,
-      favorites: 0,
+      favorites: (authorFavorite && 1) || 0,
       time,
       servings,
       date: new Date().toLocaleDateString(),
@@ -75,6 +80,7 @@ export const NewRecipe = ({ currentUser }) => {
           placeholder="Instructions"
           value={body}
           onChange={(e) => setBody(e.target.value)}
+          style={{ whiteSpace: "pre-wrap" }}
         />
       </Form.Group>
 
@@ -128,7 +134,4 @@ export const NewRecipe = ({ currentUser }) => {
   );
 };
 
-//
-//
-//
-//TODO: form needs to parseint the time and servings
+//TODO: stretch goal to add an ingredients list to the new recipe form

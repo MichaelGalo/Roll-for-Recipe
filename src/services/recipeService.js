@@ -7,14 +7,14 @@ export const getAllRecipes = async () => {
 
 export const getRecipeById = async (id) => {
   return await fetch(
-    `http://localhost:8088/recipes/${id}?_expand=user&_expand=mealCategories`
+    `http://localhost:8088/recipes/${id}?_expand=user&_expand=mealTypes`
   ).then((res) => res.json());
 };
 
 // export function to get recipes by the currentUser.id
 export const getRecipesByUserId = async (userId) => {
   return await fetch(
-    `http://localhost:8088/recipes?userId=${userId}&_expand=user`
+    `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealType`
   ).then((res) => res.json());
 };
 
@@ -50,7 +50,7 @@ export const deleteRecipe = async (id) => {
 // need a getRecipeByUserId service to get all recipes by a user
 export const getRecipeByUserId = async (userId) => {
   return await fetch(
-    `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealCategories`
+    `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealTypes`
   ).then((res) => res.json());
 };
 

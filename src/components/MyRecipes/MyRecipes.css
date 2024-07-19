@@ -1,0 +1,51 @@
+.MyRecipes {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #dda15e;
+}
+
+.MyRecipes h2 {
+  color: #333;
+  text-align: center;
+}
+
+.recipe {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #dda15e;
+}
+
+.recipe h3 {
+  margin-top: 0;
+  color: #606c38;
+}
+
+.recipe p {
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+.recipe-body {
+  display: inline-block;
+}
+
+.card-title {
+  text-align: center;
+  font-size: 1.25rem !important;
+  font-style: italic;
+}
+
+.card-text {
+  margin-bottom: 0.25rem;
+}
+
+.card-body {
+  background-color: #fefae0;
+  text-align: center;
+  font-size: 1rem;
+}
