@@ -1,0 +1,9 @@
+#root,
+#app-background {
+  background-color: #fefae0;
+}
+
+body,
+html {
+  overflow-x: hidden;
+}

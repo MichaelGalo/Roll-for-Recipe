@@ -3,6 +3,8 @@ import { getAllRecipes } from "../../services/recipeService";
 import { getMealCategories } from "../../services/mealCategoryService";
 import { AllRecipes } from "../AllRecipes/AllRecipes";
 import { FilterBar } from "../FilterBar/FilterBar";
+import { Container } from "react-bootstrap";
+import "./AllRecipesList.css";
 
 export const AllRecipesList = ({ currentUser }) => {
   const [recipes, setRecipes] = useState([]);
@@ -26,7 +28,6 @@ export const AllRecipesList = ({ currentUser }) => {
   }, []);
 
   // hook to set meal category
-  // TODO: change filteredCategories to filteredMealCategory
   useEffect(() => {
     if (filteredCategories === 0) {
       setFilteredRecipes(recipes);
@@ -59,22 +60,24 @@ export const AllRecipesList = ({ currentUser }) => {
 
   return (
     <>
-      <h2 className="centered-div post-header">All Recipes</h2>
-      <div className="centered-div">
-        <FilterBar
-          categories={categories}
-          setFilteredCategories={setFilteredCategories}
-          setSearchTerm={setSearchTerm}
-        />
-      </div>
-      <div className="centered-div">
-        <AllRecipes
-          recipes={filteredRecipes}
-          categories={categories}
-          getMealCategoryName={getMealCategoryName}
-          currentUser={currentUser}
-        />
-      </div>
+      <Container className="recipe-card-background">
+        <h2 className="post-header">All Recipes</h2>
+        <div>
+          <FilterBar
+            categories={categories}
+            setFilteredCategories={setFilteredCategories}
+            setSearchTerm={setSearchTerm}
+          />
+        </div>
+        <div>
+          <AllRecipes
+            recipes={filteredRecipes}
+            categories={categories}
+            getMealCategoryName={getMealCategoryName}
+            currentUser={currentUser}
+          />
+        </div>
+      </Container>
     </>
   );
 };

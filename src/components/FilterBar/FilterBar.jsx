@@ -1,3 +1,5 @@
+import "./FilterBar.css";
+
 export const FilterBar = ({
   categories,
   setFilteredCategories,

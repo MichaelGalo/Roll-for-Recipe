@@ -48,8 +48,8 @@ export const ApplicationViews = () => {
   );
 };
 
-// TODO:  All Recipes
-// Recipe Details
+// TODO:  Recipe Details
+//
 // New Recipe
 // My Recipes
 // Edit Recipe
