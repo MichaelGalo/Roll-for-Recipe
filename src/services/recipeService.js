@@ -11,6 +11,13 @@ export const getRecipeById = async (id) => {
   ).then((res) => res.json());
 };
 
+// export function to get recipes by the currentUser.id
+export const getRecipesByUserId = async (userId) => {
+  return await fetch(
+    `http://localhost:8088/recipes?userId=${userId}&_expand=user`
+  ).then((res) => res.json());
+};
+
 // need a PUT service to update the likes on the recipe
 export const updateRecipe = async (recipe) => {
   return await fetch(`http://localhost:8088/recipes/${recipe.id}`, {
@@ -47,4 +54,4 @@ export const getRecipeByUserId = async (userId) => {
   ).then((res) => res.json());
 };
 
-// favorites will need to be handled a little differently, since they will be booleans instead of a bridge table
+// favorites will need to be handled a little differently, since they will be booleans instead of a bridge table until I add the social component.

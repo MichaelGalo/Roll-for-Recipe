@@ -9,7 +9,11 @@ export const Welcome = () => {
     <div className="welcome">
       <img src="src/assets/Chef.png" alt="chef" />
       <h1>Welcome to Roll for Recipe!</h1>
-      <h2>Save your favorite recipes to roll for a random recipe each week!</h2>
+      <h2>A social app for the home chef.</h2>
+      <h3>
+        Save & share your recipes, select your favorites, and roll for your
+        weekly culinary challenge!
+      </h3>
       <Button
         variant="secondary"
         onClick={() => {

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getAllRecipes } from "../../services/recipeService";
+import {
+  getAllRecipes,
+  getRecipesByUserId,
+} from "../../services/recipeService";
 import { getMealCategories } from "../../services/mealCategoryService";
 import { AllRecipes } from "../AllRecipes/AllRecipes";
 import { FilterBar } from "../FilterBar/FilterBar";
@@ -13,14 +16,25 @@ export const AllRecipesList = ({ currentUser }) => {
   const [filteredCategories, setFilteredCategories] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // hook to set recipes initially ONLY for currentUser
   useEffect(() => {
-    getAllRecipes().then((recipes) => {
+    getRecipesByUserId(currentUser.id).then((recipes) => {
       setRecipes(recipes);
       setFilteredRecipes(recipes);
     });
   }, []);
 
-  // hook to set posts initially
+  //TODO: open this when social stretch goal begins
+  //
+  // hook to set recipes initially for all authors
+  // useEffect(() => {
+  //   getAllRecipes().then((recipes) => {
+  //     setRecipes(recipes);
+  //     setFilteredRecipes(recipes);
+  //   });
+  // }, []);
+
+  // hook to set meal categories initially
   useEffect(() => {
     getMealCategories().then((categories) => {
       setCategories(categories);
