@@ -6,6 +6,7 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import { Welcome } from "../components/Welcome/Welcome";
 import { NavBar } from "../components/NavBar/NavBar";
 import { AllRecipesList } from "../components/AllRecipes/AllRecipesList";
+import { NewRecipe } from "../components/NewRecipe/NewRecipe";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -35,7 +36,10 @@ export const ApplicationViews = () => {
           path="recipe-details/:recipeId"
           element={<div>Recipe Details</div>}
         />
-        <Route path="new-recipe" element={<div>New Recipe</div>} />
+        <Route
+          path="new-recipe"
+          element={<NewRecipe currentUser={currentUser} />}
+        />
         <Route path="my-recipes" element={<div>My Recipes</div>} />
         <Route path="edit-recipe/:recipeId" element={<div>Edit Recipe</div>} />
         <Route path="favorites" element={<div>Favorites</div>} />
@@ -48,9 +52,9 @@ export const ApplicationViews = () => {
   );
 };
 
-// TODO:  Recipe Details
+// TODO:  New Recipe
 //
-// New Recipe
+// Recipe Details
 // My Recipes
 // Edit Recipe
 // Favorites

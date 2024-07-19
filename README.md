@@ -98,37 +98,50 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
    - When the user types keywords into the search bar on their all recipes page
    - Then only show results for recipes that match those keywords
 
-4. **Favorite a recipe**
+4. **Filter recipes by author**
+
+   - Given the user wants to filter recipes
+   - When the user presses the author filter dropdown select on all their all recipes page
+   - Then only show results for recipes that match the author
+
+5. **Filter recipes by time of day meal**
+
+   - Given the user wants to filter recipes
+   - When the user presses the meal filter dropdown select on all their all recipes page
+   - Then only show results for recipes that match that time of day
+
+6. **Favorite a recipe**
 
    - Given the user wants to favorite recipe
    - When the user presses a favorite button on all the all recipes page
    - Then favorite button will change colors & recipe will be added to the favorites page
 
-5. **View favorite recipes**
+7. **View favorite recipes**
 
    - Given the user wants to see their favorite recipes
    - When the user clicks on the favorites button on the nav bar
    - Then the favorites page will render
 
-6. **Generate a shopping list**
+8. **Generate a shopping list**
 
    - Given the user wants to roll for recipes & selects a recipe to keep
    - When the user presses a shop! button on a recipe generated from roll-a-recipe page
    - Then the shopping list page will render all of the ingredients for the recipe in the shopping queue
 
-7. **View shopping list**
+9. **View shopping list**
 
    - Given the user wants to see their recipes currently shopping for
    - When the user presses a the shopping list button on the nav bar
    - Then shopping list page will render with ingredients displayed by sub-category with quantities displayed
 
-8. **Mark off items from shopping list**
+10. **Mark off items from shopping list**
 
-   - Given the user wants to use the application while grocery shopping to reduce ingredients
-   - When the user presses a radio button connected to a given ingredient
-   - Then the ingredient will disappear from the DOM
+- Given the user wants to use the application while grocery shopping to reduce ingredients
+- When the user presses a radio button connected to a given ingredient
+- Then the ingredient will disappear from the DOM
 
-9. **Edit password**
-   - Given the user wants to edit password
-   - When the user presses an edit password text in the profile details page
-   - Then the edit password page will appear
+11. **Edit password**
+
+- Given the user wants to edit password
+- When the user presses an edit password text in the profile details page
+- Then the edit password page will appear
