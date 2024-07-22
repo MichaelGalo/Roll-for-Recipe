@@ -73,13 +73,19 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
    - When the user clicks on the log out button on the nav bar
    - Then the page will navigate to the enter details page
 
+10. **Navigate to home page**
+
+- Given the user wants to navigate to the home page
+- When the user clicks on the logo in the nav bar
+- Then the page will navigate back to the home splash page
+
 ## Stretch Goals: User Stories & Acceptance Criteria
 
-1. **Navigate to home page**
+1. **Introduce Social Interaction through All Recipes**
 
-   - Given the user wants to navigate to the home page
-   - When the user clicks on the logo in the nav bar
-   - Then the page will navigate back to the home splash page
+   - Given the user wants to navigate to the all recipes page
+   - When the user clicks on the all recipes in the nav bar
+   - Then the page will navigate to the all recipes page displaying all recipes from all authors in the database
 
 2. **Filter recipes by cooking time**
 
