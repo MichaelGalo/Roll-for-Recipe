@@ -5,6 +5,7 @@ import { getMealCategories } from "../../services/mealCategoryService";
 import { addRecipe } from "../../services/recipeService";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { InputGroup } from "react-bootstrap";
 
 export const NewRecipe = ({ currentUser }) => {
   const [title, setTitle] = useState("");
@@ -14,6 +15,7 @@ export const NewRecipe = ({ currentUser }) => {
   const [authorFavorite, setAuthorFavorite] = useState(false);
   const [time, setTime] = useState("");
   const [servings, setServings] = useState("");
+  // const [ingredients, setIngredients] = useState([{ name: "", quantity: "" }]); TODO: implement this code after MVP
   const navigate = useNavigate();
 
   // hook to grab all categories for dropdown
@@ -26,7 +28,41 @@ export const NewRecipe = ({ currentUser }) => {
     fetchCategories();
   }, []);
 
+  //TODO: Implement this code below afterMVP
+  // //specifically targets the values of the ingredient name and quantities
+  // const handleIngredientChange = (index, event) => {
+  //   const values = [...ingredients];
+  //   values[index][event.target.name] = event.target.value;
+  //   setIngredients(values);
+  // };
+
+  // // when invoked, the adds the current state of the handledIngredientChange to the ingredients array and also creates a new object to interact with
+  // const handleAddIngredient = () => {
+  //   setIngredients([...ingredients, { name: "", quantity: "" }]);
+  // };
+
+  // // this targets the specific ingredient index and removes the 1 item there.
+  // const handleRemoveIngredient = (index) => {
+  //   const values = [...ingredients];
+  //   values.splice(index, 1);
+  //   setIngredients(values);
+  // };
+
   const handleSave = async () => {
+    // validation that all fields were inputted, except favorite
+    if (
+      !title.trim() ||
+      !body.trim() ||
+      selectedCategory === 0 ||
+      !time ||
+      !servings
+    ) {
+      alert(
+        "Please fill in all required fields including title, body, category, time, and servings."
+      );
+      return; // Stop the function from proceeding further
+    }
+
     const formattedBody = body
       .split("\n") // preserves the line break each time someone hits enter
       .map((line) => line.trim()) // removes any extra white space
@@ -36,6 +72,7 @@ export const NewRecipe = ({ currentUser }) => {
     const newRecipe = {
       title,
       body: formattedBody, // Use the formatted body
+      // ingredients: ingredients, TODO: uncover after mvp
       mealTypeId: parseInt(selectedCategory),
       userId: currentUser.id,
       authorFavorite,
@@ -55,6 +92,7 @@ export const NewRecipe = ({ currentUser }) => {
     setAuthorFavorite(false);
     setTime(0);
     setServings(0);
+    // setIngredients[{ name: "", quantity: "" }]; TODO: uncover after MVP
 
     // redirect to the my-recipes page
     navigate("/my-recipes");
@@ -72,6 +110,34 @@ export const NewRecipe = ({ currentUser }) => {
           onChange={(e) => setTitle(e.target.value)}
         />
       </Form.Group>
+
+      {/* TODO: this form group only after MVP review */}
+      {/* <Form.Group className="mb-3">
+        <Form.Label>Ingredients</Form.Label>
+        {ingredients.map((ingredient, index) => (
+          <InputGroup className="mb-3" key={index}>
+            <Form.Control
+              name="name"
+              placeholder="Ingredient name"
+              value={ingredient.name}
+              onChange={(event) => handleIngredientChange(index, event)}
+            />
+            <Form.Control
+              name="quantity"
+              placeholder="Quantity"
+              value={ingredient.quantity}
+              onChange={(event) => handleIngredientChange(index, event)}
+            />
+            <Button
+              variant="outline-secondary"
+              onClick={() => handleRemoveIngredient(index)}
+            >
+              Remove
+            </Button>
+          </InputGroup>
+        ))}
+        <Button onClick={handleAddIngredient}>Add Ingredient</Button>
+      </Form.Group> */}
 
       <Form.Group className="mb-3">
         <Form.Label>Instructions</Form.Label>
