@@ -61,12 +61,11 @@ export const ApplicationViews = () => {
   );
 };
 
-// TODO:  Edit Recipe
-//
+// TODO:
 //
 // Recipe Details Like Button?
-// Favorites
-// Profile
+// Favorites -- currently hidden in navbar
+// Profile -- currently hidden in navbar
 // Edit Profile
 // Roll for Recipe
-// Shopping List
+// Shopping List -- currently hidden in navbar

@@ -47,7 +47,7 @@ export const AllRecipesList = ({ currentUser }) => {
       setFilteredRecipes(recipes);
     } else {
       const filtered = recipes.filter(
-        (recipe) => recipe.categoryId === filteredCategories
+        (recipe) => recipe.mealTypeId === filteredCategories
       );
       setFilteredRecipes(filtered);
     }

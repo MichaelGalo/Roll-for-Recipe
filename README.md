@@ -73,11 +73,6 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
    - When the user clicks on the log out button on the nav bar
    - Then the page will navigate to the enter details page
 
-10. **Roll for recipe**
-    - Given the user wants to generate a random set of recipes
-    - When the user clicks on the Let's Roll! button on the nav bar
-    - Then the roll-for-recipe page will render, allowing them enter how many to generate from their list of recipes
-
 ## Stretch Goals: User Stories & Acceptance Criteria
 
 1. **Navigate to home page**
@@ -122,25 +117,31 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
    - When the user clicks on the favorites button on the nav bar
    - Then the favorites page will render
 
-8. **Generate a shopping list**
+8. **Roll for recipe**
+
+   - Given the user wants to generate a random set of recipes
+   - When the user clicks on the Let's Roll! button on the nav bar
+   - Then the roll-for-recipe page will render, allowing them enter how many to generate from their list of recipes
+
+9. **Generate a shopping list**
 
    - Given the user wants to roll for recipes & selects a recipe to keep
    - When the user presses a shop! button on a recipe generated from roll-a-recipe page
    - Then the shopping list page will render all of the ingredients for the recipe in the shopping queue
 
-9. **View shopping list**
+10. **View shopping list**
 
-   - Given the user wants to see their recipes currently shopping for
-   - When the user presses a the shopping list button on the nav bar
-   - Then shopping list page will render with ingredients displayed by sub-category with quantities displayed
+- Given the user wants to see their recipes currently shopping for
+- When the user presses a the shopping list button on the nav bar
+- Then shopping list page will render with ingredients displayed by sub-category with quantities displayed
 
-10. **Mark off items from shopping list**
+11. **Mark off items from shopping list**
 
 - Given the user wants to use the application while grocery shopping to reduce ingredients
 - When the user presses a radio button connected to a given ingredient
 - Then the ingredient will disappear from the DOM
 
-11. **Edit password**
+12. **Edit password**
 
 - Given the user wants to edit password
 - When the user presses an edit password text in the profile details page
