@@ -141,7 +141,13 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
 - When the user presses a radio button connected to a given ingredient
 - Then the ingredient will disappear from the DOM
 
-12. **Edit password**
+12. **Create password**
+
+- Given the user wants to create password
+- When the user presses the create password text in the account creation page
+- Then the user will be able to set a password
+
+13. **Edit password**
 
 - Given the user wants to edit password
 - When the user presses an edit password text in the profile details page
