@@ -48,5 +48,3 @@ export const MyRecipes = ({ currentUser }) => {
     </Container>
   );
 };
-
-// TODO: edit button still needs functionality

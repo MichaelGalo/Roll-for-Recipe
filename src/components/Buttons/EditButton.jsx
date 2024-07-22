@@ -1,7 +1,11 @@
+import { useNavigate } from "react-router-dom";
+import { EditRecipe } from "../EditRecipe/EditRecipe";
+
 export const EditButton = ({ currentRecipe }) => {
+  // navigate to EditRecipe component
+  const navigate = useNavigate();
   const toggleEdit = () => {
-    // editRecipe(currentRecipe.id);
-    console.log("Edit Button Working");
+    navigate(`/edit-recipe/${currentRecipe.id}`);
   };
 
   return (
