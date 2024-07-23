@@ -49,9 +49,34 @@ export const getRecipeByUserId = async (userId) => {
   ).then((res) => res.json());
 };
 
-// export function to grab the favorited meals by user id
+// export function to grab the favorite meals by user id
 export const getFavoriteMealsByUserId = async (userId) => {
   return await fetch(
     `http://localhost:8088/recipes?userId=${userId}&authorFavorite=true&_expand=user&_expand=mealType`
+  ).then((res) => res.json());
+};
+
+// export function to like another's recipe
+export const likeRecipe = async (recipeId, userId) => {
+  return await fetch(`http://localhost:8088/recipeLikes`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ recipeId, userId }),
+  }).then((res) => res.json());
+};
+
+// export function to unlike another's recipe
+export const unlikeRecipe = async (id) => {
+  return await fetch(`http://localhost:8088/recipeLikes/${id}`, {
+    method: "DELETE",
+  }).then((res) => res.json());
+};
+
+// export function to get recipeLikes by recipeId and userId
+export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
+  return await fetch(
+    `http://localhost:8088/recipeLikes?recipeId=${recipeId}&userId=${userId}`
   ).then((res) => res.json());
 };
