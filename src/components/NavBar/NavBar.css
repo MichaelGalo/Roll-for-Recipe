@@ -1,0 +1,49 @@
+.navbar {
+  background-color: #283618 !important;
+  color: #fefae0;
+}
+
+.nav-link {
+  color: #fefae0 !important;
+}
+
+.nav-link:hover {
+  color: #ffc107 !important;
+}
+
+.navbar-brand {
+  color: #fefae0 !important;
+  font-size: 1.5rem;
+}
+
+.navbar-brand:hover {
+  color: #ffc107 !important;
+}
+
+.container {
+  padding: 0.5rem 1rem;
+}
+
+.nav-link.logout:hover {
+  color: #bc6c25 !important;
+}
+
+.customize-navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-toggler {
+  margin: 5px;
+  padding: 5px;
+}
+
+/* Styles applied when the screen width is less than 768px (default Bootstrap breakpoint for collapsing the navbar) */
+@media (max-width: 767.98px) {
+  .navbar-toggler {
+    margin: 2px;
+    padding: 2px;
+    font-size: 0.75rem;
+  }
+}

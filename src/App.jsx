@@ -1,12 +1,24 @@
-import "./App.css";
+// this module is where I need to set up my routes for login, register, and *
+import { Route, Routes } from "react-router-dom";
+import { Login } from "./components/auth/Login";
+import { Register } from "./components/auth/Register";
+import { Authorized } from "./views/Authorized";
+import { ApplicationViews } from "./views/ApplicationViews";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
-function App() {
+export const App = () => {
   return (
-    <>
-      <h1>Roll for Recipe</h1>
-      <h2>Coming Soon</h2>
-    </>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="*"
+        element={
+          <Authorized>
+            <ApplicationViews />
+          </Authorized>
+        }
+      />
+    </Routes>
   );
-}
-
-export default App;
+};
