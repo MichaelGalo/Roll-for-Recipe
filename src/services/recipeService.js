@@ -56,27 +56,51 @@ export const getFavoriteMealsByUserId = async (userId) => {
   ).then((res) => res.json());
 };
 
-// export function to like another's recipe
+// export function to get recipeLikes by recipeId and userId
+export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
+  return await fetch(
+    `http://localhost:8088/recipeLikes?recipeId=${recipeId}&userId=${userId}`
+  ).then((res) => res.json());
+};
+
+// export function to get recipeLikes by recipeId
 export const likeRecipe = async (recipeId, userId) => {
-  return await fetch(`http://localhost:8088/recipeLikes`, {
+  // First, create the like
+  const newLike = await fetch(`http://localhost:8088/recipeLikes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ recipeId, userId }),
   }).then((res) => res.json());
+  // Then, get the current recipe
+  const recipe = await getRecipeById(recipeId);
+  // Update the recipe's favorites count
+  const updatedRecipe = {
+    ...recipe,
+    favorites: (recipe.favorites || 0) + 1,
+  };
+  // Save the updated recipe
+  await updateRecipe(updatedRecipe);
+
+  return newLike;
 };
 
-// export function to unlike another's recipe
-export const unlikeRecipe = async (id) => {
-  return await fetch(`http://localhost:8088/recipeLikes/${id}`, {
+// export function to unlike a recipe
+export const unlikeRecipe = async (likeId, recipeId) => {
+  // First, delete the like
+  await fetch(`http://localhost:8088/recipeLikes/${likeId}`, {
     method: "DELETE",
-  }).then((res) => res.json());
-};
+  });
+  // Then, get the current recipe
+  const recipe = await getRecipeById(recipeId);
+  // Update the recipe's favorites count
+  const updatedRecipe = {
+    ...recipe,
+    favorites: Math.max((recipe.favorites || 0) - 1, 0), // Ensure it doesn't go below 0
+  };
+  // Save the updated recipe
+  const result = await updateRecipe(updatedRecipe);
 
-// export function to get recipeLikes by recipeId and userId
-export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
-  return await fetch(
-    `http://localhost:8088/recipeLikes?recipeId=${recipeId}&userId=${userId}`
-  ).then((res) => res.json());
+  return updatedRecipe;
 };

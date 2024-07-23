@@ -71,7 +71,7 @@ export const EditRecipe = ({ currentUser }) => {
     };
 
     await updateRecipe(newRecipe);
-    navigate("/my-recipes");
+    navigate("/recipe-details/" + recipeId);
   };
 
   return (
