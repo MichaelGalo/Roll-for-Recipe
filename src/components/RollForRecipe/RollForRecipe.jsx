@@ -36,7 +36,9 @@ export const RollForRecipe = ({ currentUser }) => {
     <div className="random-meals-container">
       {meals.map((meal) => (
         <div className="random-meal" key={meal.id}>
-          <h3>{meal.title}</h3>
+          <h3>
+            <a href={`/recipe-details/${meal.id}`}>{meal.title}</a>
+          </h3>
           <p>{meal.body}</p>
         </div>
       ))}

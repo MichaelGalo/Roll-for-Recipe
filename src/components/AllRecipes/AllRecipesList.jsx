@@ -24,15 +24,14 @@ export const AllRecipesList = ({ currentUser }) => {
     });
   }, []);
 
-  //TODO: open this when social stretch goal begins
-  //
+  //TODO: open this when social stretch goal begins -- or remove if needed for MVP
   // hook to set recipes initially for all authors
-  // useEffect(() => {
-  //   getAllRecipes().then((recipes) => {
-  //     setRecipes(recipes);
-  //     setFilteredRecipes(recipes);
-  //   });
-  // }, []);
+  useEffect(() => {
+    getAllRecipes().then((recipes) => {
+      setRecipes(recipes);
+      setFilteredRecipes(recipes);
+    });
+  }, []);
 
   // hook to set meal categories initially
   useEffect(() => {

@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { EditRecipe } from "../EditRecipe/EditRecipe";
+import { Button } from "react-bootstrap";
+import "./EditButton.css";
 
 export const EditButton = ({ currentRecipe }) => {
   // navigate to EditRecipe component
@@ -9,8 +11,8 @@ export const EditButton = ({ currentRecipe }) => {
   };
 
   return (
-    <button className="edit-button" onClick={toggleEdit}>
+    <Button size="sm" className="edit-button" onClick={toggleEdit}>
       Edit
-    </button>
+    </Button>
   );
 };

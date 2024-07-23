@@ -26,23 +26,23 @@ export const NavBar = ({ currentUser }) => {
               <Nav.Link as={Link} to="/new-recipe">
                 New Recipe
               </Nav.Link>
-              {/* <Nav.Link as={Link} to="/all-recipes">
+              <Nav.Link as={Link} to="/all-recipes">
                 All Recipes
-              </Nav.Link> */}
+              </Nav.Link>
               <Nav.Link as={Link} to="/my-recipes">
                 My Recipes
               </Nav.Link>
-              {/* <Nav.Link as={Link} to="/favorites">
+              <Nav.Link as={Link} to="/favorites">
                 Favorites
-              </Nav.Link> */}
-              {/* {currentUser && currentUser.id && (
+              </Nav.Link>
+              {currentUser && currentUser.id && (
                 <Nav.Link as={Link} to={`/profile/${currentUser.id}`}>
                   Profile
                 </Nav.Link>
-              )} */}
-              {/* <Nav.Link as={Link} to="/shopping-list">
+              )}
+              <Nav.Link as={Link} to="/shopping-list">
                 Shopping List
-              </Nav.Link> */}
+              </Nav.Link>
               <Nav.Link
                 className="logout"
                 as={Link}

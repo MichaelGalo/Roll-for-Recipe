@@ -4,7 +4,8 @@ import { getRecipeById } from "../../services/recipeService";
 import "./RecipeDetails.css";
 import { LikeButton } from "../Buttons/LikeButton";
 import { EditButton } from "../Buttons/EditButton";
-import { Col, Container, Row } from "react-bootstrap";
+import { DeleteButton } from "../Buttons/DeleteButton";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
 const formatRecipeBody = (body) => {
   return body
@@ -60,21 +61,19 @@ export const RecipeDetails = ({ currentUser }) => {
           </div>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          {currentUser.id !== currentRecipe.userId && (
-            <LikeButton
-              currentRecipe={currentRecipe}
-              currentUser={currentUser}
-            />
-          )}
-          {currentUser.id === currentRecipe.userId && (
-            <EditButton
-              currentUser={currentUser}
-              currentRecipe={currentRecipe}
-            />
-          )}
-        </Col>
+      <Row className="button-container">
+        {currentUser.id !== currentRecipe.userId && (
+          <LikeButton currentRecipe={currentRecipe} currentUser={currentUser} />
+        )}{" "}
+        {currentUser.id === currentRecipe.userId && (
+          <EditButton currentUser={currentUser} currentRecipe={currentRecipe} />
+        )}
+        {currentUser.id === currentRecipe.userId && (
+          <DeleteButton
+            currentUser={currentUser}
+            currentRecipe={currentRecipe}
+          />
+        )}
       </Row>
     </Container>
   );

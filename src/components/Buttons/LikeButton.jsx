@@ -1,12 +1,16 @@
+import { Button } from "react-bootstrap";
+import "./LikeButton.css";
+
+// TODO: create likeRecipe function
+
 export const LikeButton = ({ currentRecipe }) => {
   const toggleLike = () => {
-    // likeRecipe(currentRecipe.id);
-    console.log("Like Button Working");
+    likeRecipe(currentRecipe.id);
   };
 
   return (
-    <button className="like-button" onClick={toggleLike}>
+    <Button size="sm" className="like-button" onClick={toggleLike}>
       Like
-    </button>
+    </Button>
   );
 };
