@@ -40,7 +40,12 @@ export const AllRecipes = ({
           <li className="recipe" key={recipe.id}>
             <h4>
               <span style={{ fontWeight: "bold" }}></span>{" "}
-              <Link to={`/recipe-details/${recipe.id}`}>{recipe.title}</Link>{" "}
+              <Link
+                to={`/recipe-details/${recipe.id}`}
+                className="recipe-title"
+              >
+                {recipe.title}
+              </Link>{" "}
             </h4>
             <p>
               Cuisine:{" "}

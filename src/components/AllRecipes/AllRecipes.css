@@ -47,3 +47,11 @@
 a {
   color: #606c38 !important;
 }
+
+.recipe-title {
+  text-decoration: none !important;
+}
+
+.recipe-title:hover {
+  color: #dda15e !important;
+}

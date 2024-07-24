@@ -11,6 +11,7 @@ import { MyRecipes } from "../components/MyRecipes/MyRecipes";
 import { RecipeDetails } from "../components/RecipeDetails/RecipeDetails";
 import { EditRecipe } from "../components/EditRecipe/EditRecipe";
 import { RollForRecipe } from "../components/RollForRecipe/RollForRecipe";
+import { Favorites } from "../components/Favorites/Favorites";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -52,7 +53,10 @@ export const ApplicationViews = () => {
           path="edit-recipe/:recipeId"
           element={<EditRecipe currentUser={currentUser} />}
         />
-        <Route path="favorites" element={<div>Favorites</div>} />
+        <Route
+          path="favorites"
+          element={<Favorites currentUser={currentUser} />}
+        />
         <Route path="profile/:userId" element={<div>Profile</div>} />
         <Route path="edit-profile/:userId" element={<div>Edit Profile</div>} />
         <Route
@@ -65,11 +69,7 @@ export const ApplicationViews = () => {
   );
 };
 
-// TODO: Roll for Recipe
+// TODO: Profile
 //
-// Recipe Details Like Button?
-// Favorites -- currently hidden in navbar
-// Profile -- currently hidden in navbar
 // Edit Profile
-//
-// Shopping List -- currently hidden in navbar
+// Shopping List

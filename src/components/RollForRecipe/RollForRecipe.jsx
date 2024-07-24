@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./RollForRecipe.css";
-import { getFavoriteMealsByUserId } from "../../services/recipeService";
+import { getFavoriteAuthorMealsByUserId } from "../../services/recipeService";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 export const RollForRecipe = ({ currentUser }) => {
@@ -11,7 +11,7 @@ export const RollForRecipe = ({ currentUser }) => {
 
   useEffect(() => {
     const fetchMeals = async () => {
-      const data = await getFavoriteMealsByUserId(currentUser.id);
+      const data = await getFavoriteAuthorMealsByUserId(currentUser.id);
       setFavoriteMeals(data);
     };
     fetchMeals();

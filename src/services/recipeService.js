@@ -49,10 +49,16 @@ export const getRecipeByUserId = async (userId) => {
   ).then((res) => res.json());
 };
 
-// export function to grab the favorite meals by user id
-export const getFavoriteMealsByUserId = async (userId) => {
+// export function to grab the favorite authored meals by user id
+export const getFavoriteAuthorMealsByUserId = async (userId) => {
   return await fetch(
     `http://localhost:8088/recipes?userId=${userId}&authorFavorite=true&_expand=user&_expand=mealType`
+  ).then((res) => res.json());
+};
+// export function to grab the favorite non-author meals by user id
+export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
+  return await fetch(
+    `http://localhost:8088/recipeLikes?userId=${userId}&_expand=recipe`
   ).then((res) => res.json());
 };
 

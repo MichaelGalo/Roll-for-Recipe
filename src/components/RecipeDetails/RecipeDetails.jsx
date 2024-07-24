@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom"; // Added Link import
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getRecipeById } from "../../services/recipeService";
 import "./RecipeDetails.css";
