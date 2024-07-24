@@ -40,7 +40,7 @@
   padding: 1rem;
   border-radius: 1rem;
   background-color: #dda15e;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px #bc6c25;
   transition: all 0.3s;
 }
 

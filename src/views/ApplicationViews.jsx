@@ -12,6 +12,7 @@ import { RecipeDetails } from "../components/RecipeDetails/RecipeDetails";
 import { EditRecipe } from "../components/EditRecipe/EditRecipe";
 import { RollForRecipe } from "../components/RollForRecipe/RollForRecipe";
 import { Favorites } from "../components/Favorites/Favorites";
+import { Profile } from "../components/Profile/Profile";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -57,7 +58,10 @@ export const ApplicationViews = () => {
           path="favorites"
           element={<Favorites currentUser={currentUser} />}
         />
-        <Route path="profile/:userId" element={<div>Profile</div>} />
+        <Route
+          path="profile/:userId"
+          element={<Profile currentUser={currentUser} />}
+        />
         <Route path="edit-profile/:userId" element={<div>Edit Profile</div>} />
         <Route
           path="roll-for-recipe"
