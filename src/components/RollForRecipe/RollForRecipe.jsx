@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./RollForRecipe.css";
-import { getFavoriteAuthorMealsByUserId } from "../../services/recipeService";
+import {
+  getFavoriteAuthorMealsByUserId,
+  getFavoriteNonAuthorMealsByUserId,
+} from "../../services/recipeService";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 export const RollForRecipe = ({ currentUser }) => {
@@ -11,20 +14,52 @@ export const RollForRecipe = ({ currentUser }) => {
 
   useEffect(() => {
     const fetchMeals = async () => {
-      const data = await getFavoriteAuthorMealsByUserId(currentUser.id);
-      setFavoriteMeals(data);
+      const authorFavorites = await getFavoriteAuthorMealsByUserId(
+        currentUser.id
+      );
+      const nonAuthorFavorites = await getFavoriteNonAuthorMealsByUserId(
+        currentUser.id
+      );
+      const processedNonAuthorFavorites = nonAuthorFavorites.map(
+        (favorite) => favorite.recipe
+      );
+
+      const totalFavorites = [
+        ...authorFavorites,
+        ...processedNonAuthorFavorites,
+      ];
+
+      setFavoriteMeals(totalFavorites);
     };
     fetchMeals();
   }, [currentUser]);
 
   const randomizeMeals = () => {
-    let tempRandomMeals = [];
-    for (let i = 0; i < numberOfMealsToRandomize; i++) {
-      tempRandomMeals.push(
-        favoriteMeals[Math.floor(Math.random() * favoriteMeals.length)]
-      );
+    // Create a map for quick lookup -- A Map is like a special kind of object that can use any type of key, not just strings.
+    const mealMap = new Map();
+    favoriteMeals.forEach((meal) => {
+      if (meal) {
+        const key = meal.id || meal.recipeId;
+        if (key) mealMap.set(key, meal);
+      }
+    });
+
+    // Convert map values to array for random selection
+    const uniqueMeals = Array.from(mealMap.values());
+    const result = [];
+
+    // Randomly select meals
+    for (
+      let i = 0;
+      i < numberOfMealsToRandomize && uniqueMeals.length > 0;
+      i++
+    ) {
+      const randomIndex = Math.floor(Math.random() * uniqueMeals.length);
+      result.push(uniqueMeals[randomIndex]);
+      uniqueMeals.splice(randomIndex, 1); // Remove selected meal, so it can't be picked again
     }
-    setRandomizedMeals(tempRandomMeals);
+
+    setRandomizedMeals(result);
   };
 
   const handleShowMeals = () => {
@@ -35,9 +70,11 @@ export const RollForRecipe = ({ currentUser }) => {
   const RandomMeals = ({ meals }) => (
     <div className="random-meals-container">
       {meals.map((meal) => (
-        <div className="random-meal" key={meal.id}>
+        <div className="random-meal" key={meal.id || meal.recipeId}>
           <h3>
-            <a href={`/recipe-details/${meal.id}`}>{meal.title}</a>
+            <a href={`/recipe-details/${meal.id || meal.recipeId}`}>
+              {meal.title}
+            </a>
           </h3>
           <p>{meal.body}</p>
         </div>

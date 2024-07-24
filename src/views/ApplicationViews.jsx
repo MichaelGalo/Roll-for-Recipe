@@ -67,13 +67,16 @@ export const ApplicationViews = () => {
           path="roll-for-recipe"
           element={<RollForRecipe currentUser={currentUser} />}
         />
-        <Route path="shopping-list" element={<div>Shopping List</div>} />
+        <Route
+          path="shopping-list"
+          element={<div>Shopping List under construction</div>}
+        />
       </Route>
     </Routes>
   );
 };
 
-// TODO: Profile
+// TODO:
 //
 // Edit Profile
 // Shopping List
