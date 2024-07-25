@@ -15,7 +15,7 @@ export const EditProfile = ({ currentUser }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
+      if (currentUser && currentUser.id) {
         const response = await getUserById(currentUser.id);
         setUserData({
           id: response.id,
@@ -23,16 +23,13 @@ export const EditProfile = ({ currentUser }) => {
           email: response.email || "",
         });
         localStorage.setItem("user", JSON.stringify(response));
-      } catch (error) {
-        console.error("Error fetching user data:", error);
       }
     };
-
     fetchUser();
   }, [currentUser.id]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
     setUserData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -40,12 +37,15 @@ export const EditProfile = ({ currentUser }) => {
   };
 
   const handleSave = async () => {
-    try {
-      await updateUser(userData);
-      navigate(`/profile/${currentUser.id}`);
-    } catch (error) {
-      console.error("Error updating user:", error);
-    }
+    await updateUser(userData);
+    const updatedUser = await getUserById(currentUser.id);
+    setUserData({
+      id: updatedUser.id,
+      name: updatedUser.name || "",
+      email: updatedUser.email || "",
+    });
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+    navigate(`/profile/${currentUser.id}`);
   };
 
   return (
