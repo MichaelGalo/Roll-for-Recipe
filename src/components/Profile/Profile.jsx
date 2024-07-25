@@ -3,6 +3,7 @@ import "./Profile.css";
 import { getUserById } from "../../services/userService";
 import { useEffect, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
+import { EditProfileButton } from "../Buttons/EditProfileButton";
 
 export const Profile = ({ currentUser }) => {
   const [user, setUser] = useState(() => {
@@ -33,6 +34,7 @@ export const Profile = ({ currentUser }) => {
             <Card.Body>
               <Card.Title>{user.name}</Card.Title>
               <Card.Text>{user.email}</Card.Text>
+              <EditProfileButton currentUser={currentUser} />
             </Card.Body>
           </Card>
         </Col>
