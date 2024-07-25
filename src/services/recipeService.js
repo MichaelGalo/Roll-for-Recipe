@@ -27,19 +27,62 @@ export const updateRecipe = async (recipe) => {
 };
 
 export const addRecipe = async (recipe) => {
-  return await fetch(`http://localhost:8088/recipes`, {
+  const response = await fetch("http://localhost:8088/recipes", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(recipe),
-  }).then((res) => res.json());
+  });
+  const data = await response.json();
+  return data.id;
+};
+
+export const addIngredients = async (recipeId, ingredients) => {
+  const formattedIngredients = ingredients
+    .filter((ingredient) => ingredient.ingredientId && ingredient.quantity)
+    .map((ingredient) => ({
+      ingredientId: parseInt(ingredient.ingredientId),
+      recipeId: recipeId,
+      quantity: parseInt(ingredient.quantity, 10) || 0,
+    }));
+
+  const promises = formattedIngredients.map((ingredient) =>
+    fetch(`http://localhost:8088/ingredientsForRecipe`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ingredient),
+    })
+  );
+
+  const responses = await Promise.all(promises);
+  return Promise.all(responses.map((response) => response.json()));
+};
+
+export const getIngredientsForRecipe = async (recipeId) => {
+  const response = await fetch(
+    `http://localhost:8088/ingredientsForRecipe?recipeId=${recipeId}`
+  );
+  return response.json();
 };
 
 export const deleteRecipe = async (id) => {
-  return await fetch(`http://localhost:8088/recipes/${id}`, {
+  const ingredients = await getIngredientsForRecipe(id);
+  const deletePromises = ingredients.map((ingredient) =>
+    fetch(`http://localhost:8088/ingredientsForRecipe/${ingredient.id}`, {
+      method: "DELETE",
+    })
+  );
+  // Wait for all ingredient deletions to complete
+  await Promise.all(deletePromises);
+
+  const recipeResponse = await fetch(`http://localhost:8088/recipes/${id}`, {
     method: "DELETE",
-  }).then((res) => res.json());
+  });
+
+  return recipeResponse.json();
 };
 
 //TODO: consider removing due to DRY violation

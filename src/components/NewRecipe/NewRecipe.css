@@ -38,3 +38,35 @@
   font-weight: bold !important;
   text-align: center;
 }
+
+.ingredients-dropdown,
+.ingredients-quantity {
+  height: 3rem !important;
+}
+
+.ingredients-quantity {
+  border-radius: 5px !important;
+}
+
+.delete-ingredient-btn {
+  width: 10rem !important;
+  border: none !important;
+}
+
+.add-ingredient-btn {
+  width: 10rem !important;
+  border: none !important;
+}
+
+.ingredients-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ingredient-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}

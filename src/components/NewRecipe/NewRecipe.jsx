@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import "./NewRecipe.css";
 import { useEffect, useState } from "react";
 import { getMealCategories } from "../../services/mealCategoryService";
-import { addRecipe } from "../../services/recipeService";
+import { addIngredients, addRecipe } from "../../services/recipeService";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { InputGroup } from "react-bootstrap";
+import { IngredientDropdown } from "../IngredientDropdown/IngredientDropdown";
 
 export const NewRecipe = ({ currentUser }) => {
   const [title, setTitle] = useState("");
@@ -15,7 +16,9 @@ export const NewRecipe = ({ currentUser }) => {
   const [authorFavorite, setAuthorFavorite] = useState(false);
   const [time, setTime] = useState("");
   const [servings, setServings] = useState("");
-  // const [ingredients, setIngredients] = useState([{ name: "", quantity: "" }]); TODO: implement this code after MVP
+  const [ingredients, setIngredients] = useState([
+    { ingredientId: "", quantity: "" },
+  ]);
   const navigate = useNavigate();
 
   // hook to grab all categories for dropdown
@@ -28,25 +31,30 @@ export const NewRecipe = ({ currentUser }) => {
     fetchCategories();
   }, []);
 
-  //TODO: Implement this code below afterMVP
-  // //specifically targets the values of the ingredient name and quantities
-  // const handleIngredientChange = (index, event) => {
-  //   const values = [...ingredients];
-  //   values[index][event.target.name] = event.target.value;
-  //   setIngredients(values);
-  // };
+  //specifically targets the values of the ingredient name and quantities
+  const handleIngredientChange = (index, event) => {
+    const newIngredients = [...ingredients];
+    newIngredients[index][event.target.name] = event.target.value;
+    setIngredients(newIngredients);
+  };
 
-  // // when invoked, the adds the current state of the handledIngredientChange to the ingredients array and also creates a new object to interact with
-  // const handleAddIngredient = () => {
-  //   setIngredients([...ingredients, { name: "", quantity: "" }]);
-  // };
+  const handleIngredientSelect = (index, ingredientId) => {
+    const newIngredients = [...ingredients];
+    newIngredients[index].ingredientId = ingredientId;
+    setIngredients(newIngredients);
+  };
 
-  // // this targets the specific ingredient index and removes the 1 item there.
-  // const handleRemoveIngredient = (index) => {
-  //   const values = [...ingredients];
-  //   values.splice(index, 1);
-  //   setIngredients(values);
-  // };
+  // when invoked, the adds the current state of the handledIngredientChange to the ingredients array and also creates a new object to interact with
+  const handleAddIngredient = () => {
+    setIngredients([...ingredients, { ingredientId: "", quantity: "" }]);
+  };
+
+  // this targets the specific ingredient index and removes the 1 item there.
+  const handleRemoveIngredient = (index) => {
+    const values = [...ingredients];
+    values.splice(index, 1);
+    setIngredients(values);
+  };
 
   const handleSave = async () => {
     // validation that all fields were inputted, except favorite
@@ -71,8 +79,7 @@ export const NewRecipe = ({ currentUser }) => {
     // create new recipe object to be able to post
     const newRecipe = {
       title,
-      body: formattedBody, // Use the formatted body
-      // ingredients: ingredients, TODO: uncover after mvp
+      body: formattedBody,
       mealTypeId: parseInt(selectedCategory),
       userId: currentUser.id,
       authorFavorite,
@@ -82,17 +89,17 @@ export const NewRecipe = ({ currentUser }) => {
       date: new Date().toLocaleDateString(),
     };
 
-    // this will need to be updated to send the data to the API
-    await addRecipe(newRecipe);
+    const recipeId = await addRecipe(newRecipe);
+    await addIngredients(recipeId, ingredients);
 
     // needs to clear form fields after save
     setTitle("");
     setBody("");
     setSelectedCategory("");
     setAuthorFavorite(false);
-    setTime(0);
-    setServings(0);
-    // setIngredients[{ name: "", quantity: "" }]; TODO: uncover after MVP
+    setTime("");
+    setServings("");
+    setIngredients([{ ingredientId: "", quantity: "" }]);
 
     // redirect to the my-recipes page
     navigate("/my-recipes");
@@ -110,35 +117,38 @@ export const NewRecipe = ({ currentUser }) => {
           onChange={(e) => setTitle(e.target.value)}
         />
       </Form.Group>
-
-      {/* TODO: this form group only after MVP review */}
-      {/* <Form.Group className="mb-3">
+      <Form.Group className="ingredients-container">
         <Form.Label>Ingredients</Form.Label>
         {ingredients.map((ingredient, index) => (
           <InputGroup className="mb-3" key={index}>
-            <Form.Control
-              name="name"
-              placeholder="Ingredient name"
-              value={ingredient.name}
-              onChange={(event) => handleIngredientChange(index, event)}
+            <IngredientDropdown
+              value={ingredient.ingredientId}
+              onSelect={(ingredientId) =>
+                handleIngredientSelect(index, ingredientId)
+              }
             />
             <Form.Control
+              className="ingredients-quantity"
               name="quantity"
               placeholder="Quantity"
               value={ingredient.quantity}
               onChange={(event) => handleIngredientChange(index, event)}
             />
-            <Button
-              variant="outline-secondary"
-              onClick={() => handleRemoveIngredient(index)}
-            >
-              Remove
-            </Button>
           </InputGroup>
         ))}
-        <Button onClick={handleAddIngredient}>Add Ingredient</Button>
-      </Form.Group> */}
-
+        <div className="ingredient-button-container">
+          <Button onClick={handleAddIngredient} className="add-ingredient-btn">
+            Add Ingredient
+          </Button>
+          <Button
+            className="delete-ingredient-btn"
+            variant="outline-secondary"
+            onClick={() => handleRemoveIngredient(index)}
+          >
+            Remove
+          </Button>
+        </div>
+      </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label>Instructions</Form.Label>
         <Form.Control
@@ -149,7 +159,6 @@ export const NewRecipe = ({ currentUser }) => {
           style={{ whiteSpace: "pre-wrap" }}
         />
       </Form.Group>
-
       <Form.Group className="mb-3">
         <Form.Label>Cuisine</Form.Label>
         <Form.Select
@@ -173,7 +182,6 @@ export const NewRecipe = ({ currentUser }) => {
           onChange={(e) => setTime(parseInt(e.target.value) || "")}
         />
       </Form.Group>
-
       <Form.Group className="mb-3">
         <Form.Label>Servings</Form.Label>
         <Form.Control
@@ -183,7 +191,6 @@ export const NewRecipe = ({ currentUser }) => {
           onChange={(e) => setServings(parseInt(e.target.value) || "")}
         />
       </Form.Group>
-
       <Form.Group className="mb-3" controlId="formBasicCheckbox">
         <Form.Check
           type="checkbox"
@@ -192,12 +199,9 @@ export const NewRecipe = ({ currentUser }) => {
           onChange={(e) => setAuthorFavorite(e.target.checked)}
         />
       </Form.Group>
-
       <Button variant="primary" type="submit" onClick={handleSave}>
         Save
       </Button>
     </Form>
   );
 };
-
-//TODO: stretch goal to add an ingredients list to the new recipe form
