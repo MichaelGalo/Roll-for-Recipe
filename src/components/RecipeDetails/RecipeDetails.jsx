@@ -1,6 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getRecipeById } from "../../services/recipeService";
+import {
+  getIngredientsForRecipe,
+  getRecipeById,
+} from "../../services/recipeService";
 import "./RecipeDetails.css";
 import { LikeButton } from "../Buttons/LikeButton";
 import { EditButton } from "../Buttons/EditButton";
@@ -17,17 +20,21 @@ export const RecipeDetails = ({ currentUser }) => {
   let { recipeId } = useParams();
   const [currentRecipe, setCurrentRecipe] = useState({});
   const [recipesUpdated, setRecipesUpdated] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
 
   const handleRecipeUpdate = () => {
     setRecipesUpdated(!recipesUpdated);
   };
 
   useEffect(() => {
-    const fetchRecipe = async () => {
+    const fetchData = async () => {
       const recipeData = await getRecipeById(recipeId);
       setCurrentRecipe(recipeData);
+
+      const ingredientsData = await getIngredientsForRecipe(recipeId);
+      setIngredients(ingredientsData);
     };
-    fetchRecipe();
+    fetchData();
   }, [recipeId]);
 
   return (
@@ -39,30 +46,54 @@ export const RecipeDetails = ({ currentUser }) => {
       </Row>
       <Row>
         <Col className="recipe-meta">
+          <p>Published: {currentRecipe.date}</p>
           <p>
-            By:{" "}
+            <strong>Original Chef:</strong>{" "}
             <Link to={`/profile/${currentRecipe.user?.id}`}>
               {currentRecipe.user
                 ? currentRecipe.user.name
                 : "Loading author..."}
             </Link>
           </p>
-          <p>Published: {currentRecipe.date}</p>
           <p>
-            Topic:{" "}
+            <strong>Cuisine:</strong>{" "}
             {currentRecipe.mealType
               ? currentRecipe.mealType.name
               : "Loading cuisine type..."}
           </p>
           {currentRecipe.favorites !== undefined && (
-            <p>Favorites: {currentRecipe.favorites}</p>
+            <p>
+              <strong>How many others have favorited this meal:</strong>{" "}
+              {currentRecipe.favorites}
+            </p>
+          )}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          {ingredients.length > 0 && (
+            <div>
+              <p>
+                <strong>List of Ingredients:</strong>
+              </p>
+              <ul>
+                {ingredients.map((ingredient, index) => (
+                  <li key={index}>{ingredient.ingredient.name}</li>
+                ))}
+              </ul>
+            </div>
           )}
         </Col>
       </Row>
       <Row>
         <Col>
           <div className="recipe-content">
-            {currentRecipe.body ? formatRecipeBody(currentRecipe.body) : ""}
+            <p>
+              <strong>Instructions:</strong>
+            </p>
+            <ul>
+              {currentRecipe.body ? formatRecipeBody(currentRecipe.body) : ""}
+            </ul>
           </div>
         </Col>
       </Row>

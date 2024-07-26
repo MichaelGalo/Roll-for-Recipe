@@ -63,7 +63,7 @@ export const addIngredients = async (recipeId, ingredients) => {
 
 export const getIngredientsForRecipe = async (recipeId) => {
   const response = await fetch(
-    `http://localhost:8088/ingredientsForRecipe?recipeId=${recipeId}`
+    `http://localhost:8088/ingredientsForRecipe?recipeId=${recipeId}&_expand=ingredient`
   );
   return response.json();
 };
