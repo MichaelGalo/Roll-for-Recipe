@@ -57,7 +57,6 @@ export const NewRecipe = ({ currentUser }) => {
   };
 
   const handleSave = async () => {
-    // validation that all fields were inputted, except favorite
     if (
       !title.trim() ||
       !body.trim() ||
@@ -76,7 +75,6 @@ export const NewRecipe = ({ currentUser }) => {
       .map((line) => line.trim()) // removes any extra white space
       .join("\n"); // joins the lines back together with a line break
 
-    // create new recipe object to be able to post
     const newRecipe = {
       title,
       body: formattedBody,
@@ -92,7 +90,6 @@ export const NewRecipe = ({ currentUser }) => {
     const recipeId = await addRecipe(newRecipe);
     await addIngredients(recipeId, ingredients);
 
-    // needs to clear form fields after save
     setTitle("");
     setBody("");
     setSelectedCategory("");
@@ -101,7 +98,6 @@ export const NewRecipe = ({ currentUser }) => {
     setServings("");
     setIngredients([{ ingredientId: "", quantity: "" }]);
 
-    // redirect to the my-recipes page
     navigate("/my-recipes");
   };
 
@@ -120,7 +116,7 @@ export const NewRecipe = ({ currentUser }) => {
       <Form.Group className="ingredients-container">
         <Form.Label>Ingredients</Form.Label>
         {ingredients.map((ingredient, index) => (
-          <InputGroup className="mb-3" key={index}>
+          <InputGroup className="mb-3 add-ingredient-container" key={index}>
             <IngredientDropdown
               value={ingredient.ingredientId}
               onSelect={(ingredientId) =>
@@ -134,20 +130,19 @@ export const NewRecipe = ({ currentUser }) => {
               value={ingredient.quantity}
               onChange={(event) => handleIngredientChange(index, event)}
             />
+            <Button
+              className="delete-ingredient-btn"
+              variant="outline-secondary"
+              onClick={() => handleRemoveIngredient(index)}
+            >
+              Remove
+            </Button>
           </InputGroup>
         ))}
-        <div className="ingredient-button-container">
-          <Button onClick={handleAddIngredient} className="add-ingredient-btn">
-            Add Ingredient
-          </Button>
-          <Button
-            className="delete-ingredient-btn"
-            variant="outline-secondary"
-            onClick={() => handleRemoveIngredient(index)}
-          >
-            Remove
-          </Button>
-        </div>
+
+        <Button onClick={handleAddIngredient} className="add-ingredient-btn">
+          Add Ingredient
+        </Button>
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label>Instructions</Form.Label>
@@ -205,3 +200,5 @@ export const NewRecipe = ({ currentUser }) => {
     </Form>
   );
 };
+
+// TODO: remove ingredient isn't working

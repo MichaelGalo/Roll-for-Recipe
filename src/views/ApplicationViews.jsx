@@ -1,5 +1,3 @@
-// this is the primary module where I will route my application
-
 import { useEffect } from "react";
 import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";

@@ -39,34 +39,41 @@
   text-align: center;
 }
 
-.ingredients-dropdown,
-.ingredients-quantity {
+.ingredients-dropdown {
   height: 3rem !important;
+  width: 14rem !important;
 }
 
 .ingredients-quantity {
-  border-radius: 5px !important;
+  width: 100px !important;
+  border-radius: 6px !important;
 }
 
 .delete-ingredient-btn {
-  width: 10rem !important;
   border: none !important;
+  margin-top: 0 !important;
+  border-top-left-radius: 6px !important;
+  border-bottom-left-radius: 6px !important;
+  background-color: #bc6c25 !important;
 }
 
 .add-ingredient-btn {
   width: 10rem !important;
   border: none !important;
+  margin-top: 0 !important;
 }
 
 .ingredients-container {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 1rem;
 }
 
-.ingredient-button-container {
+.add-ingredient-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
