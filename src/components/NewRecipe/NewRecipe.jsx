@@ -200,5 +200,3 @@ export const NewRecipe = ({ currentUser }) => {
     </Form>
   );
 };
-
-// TODO: remove ingredient isn't working

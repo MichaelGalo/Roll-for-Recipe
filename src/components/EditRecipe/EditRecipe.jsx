@@ -1,10 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import "./EditRecipe.css";
 import { useEffect, useState } from "react";
-import { getRecipeById, updateRecipe } from "../../services/recipeService";
-import { Button } from "react-bootstrap";
+import {
+  getIngredientsForRecipe,
+  getRecipeById,
+  updateRecipe,
+} from "../../services/recipeService";
+import { Button, InputGroup } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { getMealCategories } from "../../services/mealCategoryService";
+import { IngredientDropdown } from "../IngredientDropdown/IngredientDropdown";
+import { updateIngredientsForRecipe } from "../../services/ingredientsService";
 
 export const EditRecipe = ({ currentUser }) => {
   const [title, setTitle] = useState("");
@@ -15,25 +21,19 @@ export const EditRecipe = ({ currentUser }) => {
   const [favorites, setFavorites] = useState(0);
   const [time, setTime] = useState(0);
   const [servings, setServings] = useState(0);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const categoriesData = await getMealCategories();
-      setCategories(categoriesData);
-    };
-
-    fetchCategories();
-  }, []);
-
+  const [ingredients, setIngredients] = useState([]);
   const { recipeId } = useParams();
   const [currentRecipe, setCurrentRecipe] = useState({});
-  // Fetch current recipe details based on recipeId from URL params
+  const navigate = useNavigate();
+
+  // Combined fetch of categories, recipe details, and ingredients
   useEffect(() => {
-    const fetchRecipe = async () => {
+    const fetchData = async () => {
+      const categoriesData = await getMealCategories();
+      setCategories(categoriesData);
+
       const recipe = await getRecipeById(recipeId);
       setCurrentRecipe(recipe);
-      // Set form fields with current recipe details
       setTitle(recipe.title);
       setBody(recipe.body);
       setMealTypeId(recipe.mealTypeId);
@@ -41,9 +41,35 @@ export const EditRecipe = ({ currentUser }) => {
       setServings(recipe.servings);
       setAuthorFavorite(recipe.authorFavorite);
       setFavorites(recipe.favorites);
+
+      const ingredientsData = await getIngredientsForRecipe(recipeId);
+      setIngredients(ingredientsData);
     };
-    fetchRecipe();
+
+    fetchData();
   }, [recipeId]);
+
+  const handleIngredientChange = (index, event) => {
+    const newIngredients = [...ingredients];
+    newIngredients[index][event.target.name] = event.target.value;
+    setIngredients(newIngredients);
+  };
+
+  const handleIngredientSelect = (index, ingredientId) => {
+    const newIngredients = [...ingredients];
+    newIngredients[index].ingredientId = ingredientId;
+    setIngredients(newIngredients);
+  };
+
+  const handleAddIngredient = () => {
+    setIngredients([...ingredients, { ingredientId: "", quantity: "" }]);
+  };
+
+  const handleRemoveIngredient = (index) => {
+    const values = [...ingredients];
+    values.splice(index, 1);
+    setIngredients(values);
+  };
 
   const handleSave = async () => {
     const formattedBody = body
@@ -70,7 +96,11 @@ export const EditRecipe = ({ currentUser }) => {
       date: new Date().toLocaleDateString(),
     };
 
-    await updateRecipe(newRecipe);
+    const updatedRecipe = await updateRecipe(newRecipe);
+    await updateIngredientsForRecipe(recipeId, ingredients);
+    const updatedIngredients = await getIngredientsForRecipe(recipeId);
+    setIngredients(updatedIngredients);
+
     navigate("/recipe-details/" + recipeId);
   };
 
@@ -79,7 +109,7 @@ export const EditRecipe = ({ currentUser }) => {
       className="NewRecipeForm"
       onSubmit={(e) => {
         e.preventDefault();
-        handleSave();
+        // handleSave();
       }}
     >
       <Form.Label id="new-recipe-title">Edit Recipe</Form.Label>
@@ -91,6 +121,38 @@ export const EditRecipe = ({ currentUser }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+      </Form.Group>
+
+      <Form.Group className="ingredients-container">
+        <Form.Label>Ingredients</Form.Label>
+        {ingredients.map((ingredient, index) => (
+          <InputGroup className="mb-3 add-ingredient-container" key={index}>
+            <IngredientDropdown
+              value={ingredient.ingredientId}
+              onSelect={(ingredientId) =>
+                handleIngredientSelect(index, ingredientId)
+              }
+            />
+            <Form.Control
+              className="ingredients-quantity"
+              name="quantity"
+              placeholder="Quantity"
+              value={ingredient.quantity}
+              onChange={(event) => handleIngredientChange(index, event)}
+            />
+            <Button
+              className="delete-ingredient-btn"
+              variant="outline-secondary"
+              onClick={() => handleRemoveIngredient(index)}
+            >
+              Remove
+            </Button>
+          </InputGroup>
+        ))}
+
+        <Button onClick={handleAddIngredient} className="add-ingredient-btn">
+          Add Ingredient
+        </Button>
       </Form.Group>
 
       <Form.Group className="mb-3">

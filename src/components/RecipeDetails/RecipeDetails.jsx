@@ -16,6 +16,11 @@ const formatRecipeBody = (body) => {
 export const RecipeDetails = ({ currentUser }) => {
   let { recipeId } = useParams();
   const [currentRecipe, setCurrentRecipe] = useState({});
+  const [recipesUpdated, setRecipesUpdated] = useState(false);
+
+  const handleRecipeUpdate = () => {
+    setRecipesUpdated(!recipesUpdated);
+  };
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -66,12 +71,17 @@ export const RecipeDetails = ({ currentUser }) => {
           <LikeButton currentRecipe={currentRecipe} currentUser={currentUser} />
         )}{" "}
         {currentUser.id === currentRecipe.userId && (
-          <EditButton currentUser={currentUser} currentRecipe={currentRecipe} />
+          <EditButton
+            currentUser={currentUser}
+            currentRecipe={currentRecipe}
+            handleRecipeUpdate={handleRecipeUpdate}
+          />
         )}
         {currentUser.id === currentRecipe.userId && (
           <DeleteButton
             currentUser={currentUser}
             currentRecipe={currentRecipe}
+            handleRecipeUpdate={handleRecipeUpdate}
           />
         )}
       </Row>
