@@ -76,7 +76,8 @@ export const RollForRecipe = ({ currentUser }) => {
               {meal.title}
             </a>
           </h3>
-          <p>{meal.body}</p>
+          <p>Servings: {meal.servings}</p>
+          <p>Time to Prepare: {meal.time} (minutes)</p>
         </div>
       ))}
     </div>
@@ -126,5 +127,3 @@ export const RollForRecipe = ({ currentUser }) => {
     </Container>
   );
 };
-
-//TODO: Hotfix that they all need to be unique meals -- turn into a set

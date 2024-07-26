@@ -65,5 +65,3 @@ export const AllRecipes = ({
     </Container>
   );
 };
-
-//TODO: number of favorites to track below the author after social stretch goal begins
