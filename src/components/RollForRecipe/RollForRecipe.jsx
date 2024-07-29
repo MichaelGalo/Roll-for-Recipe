@@ -5,12 +5,14 @@ import {
   getFavoriteNonAuthorMealsByUserId,
 } from "../../services/recipeService";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { useMealContext } from "../Context/MealContext";
 
 export const RollForRecipe = ({ currentUser }) => {
   const [favoriteMeals, setFavoriteMeals] = useState([]);
   const [numberOfMealsToRandomize, setNumberOfMealsToRandomize] = useState(0);
   const [randomizedMeals, setRandomizedMeals] = useState([]);
   const [showRandomMeals, setShowRandomMeals] = useState(false);
+  const { selectedMeals, addMeal, removeMeal } = useMealContext();
 
   useEffect(() => {
     const fetchMeals = async () => {
@@ -35,7 +37,6 @@ export const RollForRecipe = ({ currentUser }) => {
   }, [currentUser]);
 
   const randomizeMeals = () => {
-    // Create a map for quick lookup -- A Map is like a special kind of object that can use any type of key, not just strings.
     const mealMap = new Map();
     favoriteMeals.forEach((meal) => {
       if (meal) {
@@ -44,11 +45,9 @@ export const RollForRecipe = ({ currentUser }) => {
       }
     });
 
-    // Convert map values to array for random selection
     const uniqueMeals = Array.from(mealMap.values());
     const result = [];
 
-    // Randomly select meals
     for (
       let i = 0;
       i < numberOfMealsToRandomize && uniqueMeals.length > 0;
@@ -56,7 +55,7 @@ export const RollForRecipe = ({ currentUser }) => {
     ) {
       const randomIndex = Math.floor(Math.random() * uniqueMeals.length);
       result.push(uniqueMeals[randomIndex]);
-      uniqueMeals.splice(randomIndex, 1); // Remove selected meal, so it can't be picked again
+      uniqueMeals.splice(randomIndex, 1);
     }
 
     setRandomizedMeals(result);
@@ -67,17 +66,45 @@ export const RollForRecipe = ({ currentUser }) => {
     setShowRandomMeals(true);
   };
 
-  const RandomMeals = ({ meals }) => (
+  const isMealSelected = (meal) => {
+    return selectedMeals.some(
+      (selectedMeal) =>
+        (selectedMeal.id || selectedMeal.recipeId) ===
+        (meal.id || meal.recipeId)
+    );
+  };
+
+  const onMealSelect = (meal, isSelected) => {
+    if (isSelected) {
+      addMeal(meal);
+    } else {
+      removeMeal(meal.id || meal.recipeId);
+    }
+  };
+
+  const RandomMeals = ({ meals, onMealSelect }) => (
     <div className="random-meals-container">
       {meals.map((meal) => (
         <div className="random-meal" key={meal.id || meal.recipeId}>
-          <h3>
-            <a href={`/recipe-details/${meal.id || meal.recipeId}`}>
-              {meal.title}
-            </a>
-          </h3>
-          <p>Servings: {meal.servings}</p>
-          <p>Time to Prepare: {meal.time} (minutes)</p>
+          <Form.Check
+            type="checkbox"
+            id={`meal-${meal.id || meal.recipeId}`}
+            label={
+              <>
+                <h3>
+                  <a href={`/recipe-details/${meal.id || meal.recipeId}`}>
+                    {meal.title}
+                  </a>
+                </h3>
+                <p>Servings: {meal.servings}</p>
+                <p>Time to Prepare: {meal.time} (minutes)</p>
+              </>
+            }
+            checked={isMealSelected(meal)}
+            onChange={(e) => {
+              onMealSelect(meal, e.target.checked);
+            }}
+          />
         </div>
       ))}
     </div>
@@ -101,7 +128,7 @@ export const RollForRecipe = ({ currentUser }) => {
                   setNumberOfMealsToRandomize(Number(e.target.value))
                 }
               >
-                <option>Select Here</option>
+                <option value="0">Select Here</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -120,7 +147,7 @@ export const RollForRecipe = ({ currentUser }) => {
       {showRandomMeals && (
         <Row className="mt-4">
           <Col>
-            <RandomMeals meals={randomizedMeals} />
+            <RandomMeals meals={randomizedMeals} onMealSelect={onMealSelect} />
           </Col>
         </Row>
       )}

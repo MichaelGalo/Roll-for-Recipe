@@ -12,6 +12,7 @@ import { RollForRecipe } from "../components/RollForRecipe/RollForRecipe";
 import { Favorites } from "../components/Favorites/Favorites";
 import { Profile } from "../components/Profile/Profile";
 import { EditProfile } from "../components/EditProfile/EditProfile";
+import { ShoppingList } from "../components/ShoppingList/ShoppingList";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -71,11 +72,9 @@ export const ApplicationViews = () => {
         />
         <Route
           path="shopping-list"
-          element={<div>Shopping List under construction</div>}
+          element={<ShoppingList currentUser={currentUser} />}
         />
       </Route>
     </Routes>
   );
 };
-
-// TODO: Shopping List
