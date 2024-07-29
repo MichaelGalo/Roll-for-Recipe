@@ -1,6 +1,6 @@
 import "./ShoppingList.css";
 import React, { useEffect, useState } from "react";
-import { ListGroup } from "react-bootstrap";
+import { ListGroup, Container, Row, Col } from "react-bootstrap";
 import { useMealContext } from "../Context/MealContext";
 import { getIngredientsForRecipe } from "../../services/recipeService";
 import { fetchGrocerySubtypeNames } from "../../services/ingredientsService";
@@ -72,22 +72,64 @@ export const ShoppingList = () => {
     return acc;
   }, {});
 
+  //   return (
+  //     <div>
+  //       <h2>Shopping List</h2>
+  //       <ListGroup>
+  //         {ingredients.length === 0 ? (
+  //           <ListGroup.Item>
+  //             No ingredients in shopping list, add some recipes to your list by
+  //             rolling to get started!
+  //           </ListGroup.Item>
+  //         ) : (
+  //           Object.keys(groupedIngredients).map((subtypeId) => (
+  //             <div key={subtypeId}>
+  //               <h3>{grocerySubtypeNames[subtypeId]}</h3>
+  //               {groupedIngredients[subtypeId].map((ingredient, index) => (
+  //                 <ListGroup.Item key={index}>
+  //                   {ingredient.quantity} {ingredient.ingredient.name}
+  //                 </ListGroup.Item>
+  //               ))}
+  //             </div>
+  //           ))
+  //         )}
+  //       </ListGroup>
+  //     </div>
+  //   );
+
   return (
-    <div>
-      <h2>Shopping List</h2>
-      <ListGroup>
-        {Object.keys(groupedIngredients).map((subtypeId) => (
-          <div key={subtypeId}>
-            <h3>{grocerySubtypeNames[subtypeId]}</h3>
-            {groupedIngredients[subtypeId].map((ingredient, index) => (
-              <ListGroup.Item key={index}>
-                {ingredient.quantity} {ingredient.ingredient.name}
+    <Container>
+      <Row className="my-4">
+        <Col>
+          <h2>Shopping List</h2>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ListGroup>
+            {ingredients.length === 0 ? (
+              <ListGroup.Item className="text-center">
+                No ingredients in shopping list, add some recipes to your list
+                by rolling to get started!
               </ListGroup.Item>
-            ))}
-          </div>
-        ))}
-      </ListGroup>
-    </div>
+            ) : (
+              Object.keys(groupedIngredients).map((subtypeId) => (
+                <div key={subtypeId} className="mb-4">
+                  <h3>{grocerySubtypeNames[subtypeId]}</h3>
+                  <ListGroup>
+                    {groupedIngredients[subtypeId].map((ingredient, index) => (
+                      <ListGroup.Item key={index}>
+                        {ingredient.quantity} {ingredient.ingredient.name}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </div>
+              ))
+            )}
+          </ListGroup>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
