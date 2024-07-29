@@ -4,6 +4,7 @@ import { ListGroup, Container, Row, Col } from "react-bootstrap";
 import { useMealContext } from "../Context/MealContext";
 import { getIngredientsForRecipe } from "../../services/recipeService";
 import { fetchGrocerySubtypeNames } from "../../services/ingredientsService";
+import { Link } from "react-router-dom";
 
 export const ShoppingList = () => {
   const { selectedMeals } = useMealContext();
@@ -88,7 +89,30 @@ export const ShoppingList = () => {
           <h2>Shopping List</h2>
         </Col>
       </Row>
-      <Row>
+      <Row className="my-4 ">
+        <Col>
+          <h4>Selected Meals</h4>
+          <ListGroup>
+            {selectedMeals.length === 0 ? (
+              <ListGroup.Item className="selected-meals">
+                No meals selected
+              </ListGroup.Item>
+            ) : (
+              selectedMeals.map((meal) => (
+                <ListGroup.Item key={meal.id} className="selected-meals">
+                  <Link
+                    className="selected-meals-link"
+                    to={`/recipe-details/${meal.id}`}
+                  >
+                    {meal.title}
+                  </Link>
+                </ListGroup.Item>
+              ))
+            )}
+          </ListGroup>
+        </Col>
+      </Row>
+      <Row className="my-4">
         <Col>
           <ListGroup>
             {ingredients.length === 0 ? (

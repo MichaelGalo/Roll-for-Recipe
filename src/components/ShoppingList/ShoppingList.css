@@ -15,3 +15,21 @@ h4 {
   background-color: #dda15e !important;
   text-decoration: line-through !important;
 }
+
+.selected-meals {
+  background-color: #283618 !important;
+  text-decoration: underline !important;
+  color: #fefae0 !important;
+}
+
+.selected-meals-link {
+  color: #fefae0 !important;
+}
+
+.selected-meals-link:hover {
+  color: #dda15e !important;
+}
+
+.selected-meals-container {
+  border: #283618 !important;
+}
