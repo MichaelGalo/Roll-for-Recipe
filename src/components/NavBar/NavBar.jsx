@@ -27,7 +27,7 @@ export const NavBar = ({ currentUser }) => {
                 New Recipe
               </Nav.Link>
               <Nav.Link as={Link} to="/all-recipes">
-                All Recipes
+                Discover
               </Nav.Link>
               <Nav.Link as={Link} to="/my-recipes">
                 My Recipes

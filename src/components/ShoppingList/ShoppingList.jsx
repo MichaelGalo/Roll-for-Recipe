@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useMealContext } from "../Context/MealContext";
 import { getIngredientsForRecipe } from "../../services/recipeService";
+import { fetchGrocerySubtypeNames } from "../../services/ingredientsService";
 
 export const ShoppingList = () => {
   const { selectedMeals } = useMealContext();
   const [ingredients, setIngredients] = useState([]);
+  const [grocerySubtypeNames, setGrocerySubtypeNames] = useState({});
 
   useEffect(() => {
     const fetchIngredients = async () => {
@@ -44,14 +46,45 @@ export const ShoppingList = () => {
     fetchIngredients();
   }, [selectedMeals]);
 
+  useEffect(() => {
+    const fetchAndSetGrocerySubtypeNames = async () => {
+      const groceryCategories = ingredients.map(
+        (ingredient) => ingredient.ingredient.grocerySubTypeId
+      );
+      const uniqueGroceryCategories = [...new Set(groceryCategories)];
+      const subtypeNames = await fetchGrocerySubtypeNames(
+        uniqueGroceryCategories
+      );
+      setGrocerySubtypeNames(subtypeNames);
+    };
+
+    if (ingredients.length > 0) {
+      fetchAndSetGrocerySubtypeNames();
+    }
+  }, [ingredients]);
+
+  const groupedIngredients = ingredients.reduce((acc, ingredient) => {
+    const subtypeId = ingredient.ingredient.grocerySubTypeId;
+    if (!acc[subtypeId]) {
+      acc[subtypeId] = [];
+    }
+    acc[subtypeId].push(ingredient);
+    return acc;
+  }, {});
+
   return (
     <div>
       <h2>Shopping List</h2>
       <ListGroup>
-        {ingredients.map((ingredient, index) => (
-          <ListGroup.Item key={index}>
-            {ingredient.quantity} {ingredient.ingredient.name}
-          </ListGroup.Item>
+        {Object.keys(groupedIngredients).map((subtypeId) => (
+          <div key={subtypeId}>
+            <h3>{grocerySubtypeNames[subtypeId]}</h3>
+            {groupedIngredients[subtypeId].map((ingredient, index) => (
+              <ListGroup.Item key={index}>
+                {ingredient.quantity} {ingredient.ingredient.name}
+              </ListGroup.Item>
+            ))}
+          </div>
         ))}
       </ListGroup>
     </div>

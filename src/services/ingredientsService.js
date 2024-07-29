@@ -66,3 +66,16 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
   const responses = await Promise.all(updatePromises);
   return Promise.all(responses.map((response) => response.json()));
 };
+
+export const fetchGrocerySubtypeNames = async (subtypeIds) => {
+  const subtypePromises = subtypeIds.map((id) =>
+    fetch(`http://localhost:8088/grocerySubtypes/${id}`).then((response) =>
+      response.json()
+    )
+  );
+  const subtypes = await Promise.all(subtypePromises);
+  return subtypes.reduce((acc, subtype) => {
+    acc[subtype.id] = subtype.name;
+    return acc;
+  }, {});
+};
