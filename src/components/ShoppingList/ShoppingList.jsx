@@ -9,6 +9,7 @@ export const ShoppingList = () => {
   const { selectedMeals } = useMealContext();
   const [ingredients, setIngredients] = useState([]);
   const [grocerySubtypeNames, setGrocerySubtypeNames] = useState({});
+  const [clickedItems, setClickedItems] = useState({});
 
   useEffect(() => {
     const fetchIngredients = async () => {
@@ -72,30 +73,13 @@ export const ShoppingList = () => {
     return acc;
   }, {});
 
-  //   return (
-  //     <div>
-  //       <h2>Shopping List</h2>
-  //       <ListGroup>
-  //         {ingredients.length === 0 ? (
-  //           <ListGroup.Item>
-  //             No ingredients in shopping list, add some recipes to your list by
-  //             rolling to get started!
-  //           </ListGroup.Item>
-  //         ) : (
-  //           Object.keys(groupedIngredients).map((subtypeId) => (
-  //             <div key={subtypeId}>
-  //               <h3>{grocerySubtypeNames[subtypeId]}</h3>
-  //               {groupedIngredients[subtypeId].map((ingredient, index) => (
-  //                 <ListGroup.Item key={index}>
-  //                   {ingredient.quantity} {ingredient.ingredient.name}
-  //                 </ListGroup.Item>
-  //               ))}
-  //             </div>
-  //           ))
-  //         )}
-  //       </ListGroup>
-  //     </div>
-  //   );
+  // create function to change the color of the list item if a user clicks on it
+  const changeColor = (ingredientId) => {
+    setClickedItems((prevClickedItems) => ({
+      ...prevClickedItems,
+      [ingredientId]: !prevClickedItems[ingredientId],
+    }));
+  };
 
   return (
     <Container>
@@ -115,10 +99,16 @@ export const ShoppingList = () => {
             ) : (
               Object.keys(groupedIngredients).map((subtypeId) => (
                 <div key={subtypeId} className="mb-4">
-                  <h3>{grocerySubtypeNames[subtypeId]}</h3>
+                  <h4>{grocerySubtypeNames[subtypeId]}</h4>
                   <ListGroup>
                     {groupedIngredients[subtypeId].map((ingredient, index) => (
-                      <ListGroup.Item key={index}>
+                      <ListGroup.Item
+                        key={index}
+                        onClick={() => changeColor(ingredient.id)}
+                        className={
+                          clickedItems[ingredient.id] ? "selected-item" : ""
+                        }
+                      >
                         {ingredient.quantity} {ingredient.ingredient.name}
                       </ListGroup.Item>
                     ))}
