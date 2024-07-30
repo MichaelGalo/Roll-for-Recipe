@@ -4,6 +4,7 @@ export const FilterBar = ({
   categories,
   setFilteredCategories,
   setSearchTerm,
+  setPrepTime,
 }) => {
   return (
     <div className="filter-bar">
@@ -19,6 +20,16 @@ export const FilterBar = ({
             {mealCategory.name}
           </option>
         ))}
+      </select>
+
+      <select
+        className="mealTime-filter"
+        onChange={(event) => setPrepTime(parseInt(event.target.value))}
+      >
+        <option value="10000">Filter by Prep Time</option>
+        <option value="15">15 minutes or less</option>
+        <option value="30">30 minutes or less</option>
+        <option value="60">1 hour or less</option>
       </select>
 
       <input

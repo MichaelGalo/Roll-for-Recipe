@@ -61,6 +61,12 @@ export const RecipeDetails = ({ currentUser }) => {
               ? currentRecipe.mealType.name
               : "Loading cuisine type..."}
           </p>
+          <p>
+            <strong>Time:</strong>{" "}
+            {currentRecipe.time
+              ? currentRecipe.time
+              : "No set prep time for this recipe"}
+          </p>
           {currentRecipe.favorites !== undefined && (
             <p>
               <strong>How many others have favorited this meal:</strong>{" "}

@@ -26,7 +26,7 @@ export const EditRecipe = ({ currentUser }) => {
   const [currentRecipe, setCurrentRecipe] = useState({});
   const navigate = useNavigate();
 
-  // Combined fetch of categories, recipe details, and ingredients
+  // Combined fetch of categories, recipe details, and ingredients on component mount
   useEffect(() => {
     const fetchData = async () => {
       const categoriesData = await getMealCategories();
