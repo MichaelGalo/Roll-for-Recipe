@@ -19,24 +19,32 @@ export const AllRecipesList = ({ currentUser }) => {
   // hook to set recipes initially ONLY for currentUser
   useEffect(() => {
     getRecipesByUserId(currentUser.id).then((recipes) => {
-      setRecipes(recipes);
-      setFilteredRecipes(recipes);
+      const sortedRecipes = recipes.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+      setRecipes(sortedRecipes);
+      setFilteredRecipes(sortedRecipes);
     });
-  }, []);
+  }, [currentUser.id]);
 
-  //TODO: open this when social stretch goal begins -- or remove if needed for MVP
   // hook to set recipes initially for all authors
   useEffect(() => {
     getAllRecipes().then((recipes) => {
-      setRecipes(recipes);
-      setFilteredRecipes(recipes);
+      const sortedRecipes = recipes.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+      setRecipes(sortedRecipes);
+      setFilteredRecipes(sortedRecipes);
     });
   }, []);
 
   // hook to set meal categories initially
   useEffect(() => {
     getMealCategories().then((categories) => {
-      setCategories(categories);
+      const sortedCategories = categories.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setCategories(sortedCategories);
     });
   }, []);
 

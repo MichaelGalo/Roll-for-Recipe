@@ -13,7 +13,10 @@ export const MyRecipes = ({ currentUser }) => {
   useEffect(() => {
     const fetchMyPosts = async () => {
       const recipesData = await getRecipesByUserId(currentUser.id);
-      setMyRecipes(recipesData);
+      const sortedRecipes = recipesData.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+      setMyRecipes(sortedRecipes);
     };
     fetchMyPosts();
   }, [currentUser.id, recipesUpdated]);

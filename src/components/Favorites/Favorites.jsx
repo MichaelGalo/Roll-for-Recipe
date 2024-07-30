@@ -20,7 +20,12 @@ export const Favorites = ({ currentUser }) => {
         currentUser.id
       );
       totalFavorites = authorFavorites.concat(nonAuthorFavorites);
-      setFavorites(totalFavorites);
+
+      const sortedFavorites = totalFavorites.sort((a, b) =>
+        (a.recipe?.title || a.title).localeCompare(b.recipe?.title || b.title)
+      );
+
+      setFavorites(sortedFavorites);
     };
 
     fetchFavorites();
