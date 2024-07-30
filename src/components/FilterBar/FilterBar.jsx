@@ -9,6 +9,7 @@ export const FilterBar = ({
   return (
     <div className="filter-bar">
       <select
+        id="mealCategory-filter"
         className="mealCategory-filter"
         onChange={(event) =>
           setFilteredCategories(parseInt(event.target.value))
@@ -23,6 +24,7 @@ export const FilterBar = ({
       </select>
 
       <select
+        id="prepTime-filter"
         className="mealTime-filter"
         onChange={(event) => setPrepTime(parseInt(event.target.value))}
       >
@@ -33,6 +35,7 @@ export const FilterBar = ({
       </select>
 
       <input
+        id="recipe-search"
         onChange={(event) => {
           setSearchTerm(event.target.value);
         }}

@@ -28,10 +28,10 @@ export const RecipeDetails = ({ currentUser }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const recipeData = await getRecipeById(recipeId);
+      const recipeData = await getRecipeById(parseInt(recipeId));
       setCurrentRecipe(recipeData);
 
-      const ingredientsData = await getIngredientsForRecipe(recipeId);
+      const ingredientsData = await getIngredientsForRecipe(parseInt(recipeId));
       setIngredients(ingredientsData);
     };
     fetchData();
