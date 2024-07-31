@@ -5,9 +5,9 @@ import {
 } from "../../services/recipeService";
 import { getMealCategories } from "../../services/mealCategoryService";
 import { AllRecipes } from "../AllRecipes/AllRecipes";
-import { FilterBar } from "../FilterBar/FilterBar";
 import { Container } from "react-bootstrap";
 import "./AllRecipesList.css";
+import { FilterBar } from "../FilterBar/FilterBar";
 
 export const AllRecipesList = ({ currentUser }) => {
   const [recipes, setRecipes] = useState([]);
@@ -15,55 +15,37 @@ export const AllRecipesList = ({ currentUser }) => {
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [prepTime, setPrepTime] = useState(null);
 
-  // hook to set recipes initially ONLY for currentUser
+  // Combined hook to fetch both user recipes and all recipes
+  // userRecipesData isn't currently used, but could be used later if needed
   useEffect(() => {
-    getRecipesByUserId(currentUser.id).then((recipes) => {
-      setRecipes(recipes);
-      setFilteredRecipes(recipes);
-    });
-  }, []);
+    const fetchRecipes = async () => {
+      const [userRecipesData, allRecipesData] = await Promise.all([
+        getRecipesByUserId(currentUser.id),
+        getAllRecipes(),
+      ]);
 
-  //TODO: open this when social stretch goal begins
-  //
-  // hook to set recipes initially for all authors
-  // useEffect(() => {
-  //   getAllRecipes().then((recipes) => {
-  //     setRecipes(recipes);
-  //     setFilteredRecipes(recipes);
-  //   });
-  // }, []);
+      const sortedAllRecipes = allRecipesData.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
 
-  // hook to set meal categories initially
+      setRecipes(sortedAllRecipes);
+      setFilteredRecipes(sortedAllRecipes);
+    };
+
+    fetchRecipes();
+  }, [currentUser.id]);
+
+  // hook to fetch and set meal categories
   useEffect(() => {
     getMealCategories().then((categories) => {
-      setCategories(categories);
+      const sortedCategories = categories.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setCategories(sortedCategories);
     });
   }, []);
-
-  // hook to set meal category
-  useEffect(() => {
-    if (filteredCategories === 0) {
-      setFilteredRecipes(recipes);
-    } else {
-      const filtered = recipes.filter(
-        (recipe) => recipe.mealTypeId === filteredCategories
-      );
-      setFilteredRecipes(filtered);
-    }
-  }, [filteredCategories, recipes]);
-
-  // hook to watch for search term changes
-  useEffect(() => {
-    if (searchTerm === "") {
-      setFilteredRecipes(recipes);
-    } else {
-      const matchedTerms = recipes.filter((recipe) =>
-        recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredRecipes(matchedTerms);
-    }
-  }, [searchTerm, recipes]);
 
   const getMealCategoryName = (categoryId) => {
     const mealCategory = categories.find(
@@ -71,6 +53,31 @@ export const AllRecipesList = ({ currentUser }) => {
     );
     return mealCategory ? mealCategory.name : "Unknown Meal Category";
   };
+
+  // Hook to filter recipes based on selected filters
+  useEffect(() => {
+    let updatedRecipes = [...recipes];
+
+    if (filteredCategories !== 0) {
+      updatedRecipes = updatedRecipes.filter(
+        (recipe) => recipe.mealTypeId === filteredCategories
+      );
+    }
+
+    if (searchTerm !== "") {
+      updatedRecipes = updatedRecipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (prepTime !== null) {
+      updatedRecipes = updatedRecipes.filter(
+        (recipe) => recipe.time <= prepTime
+      );
+    }
+
+    setFilteredRecipes(updatedRecipes);
+  }, [filteredCategories, searchTerm, prepTime, recipes]);
 
   return (
     <>
@@ -81,6 +88,7 @@ export const AllRecipesList = ({ currentUser }) => {
             categories={categories}
             setFilteredCategories={setFilteredCategories}
             setSearchTerm={setSearchTerm}
+            setPrepTime={setPrepTime}
           />
         </div>
         <div>

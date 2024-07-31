@@ -1,5 +1,3 @@
-// this is the primary module where I will route my application
-
 import { useEffect } from "react";
 import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
@@ -11,6 +9,10 @@ import { MyRecipes } from "../components/MyRecipes/MyRecipes";
 import { RecipeDetails } from "../components/RecipeDetails/RecipeDetails";
 import { EditRecipe } from "../components/EditRecipe/EditRecipe";
 import { RollForRecipe } from "../components/RollForRecipe/RollForRecipe";
+import { Favorites } from "../components/Favorites/Favorites";
+import { Profile } from "../components/Profile/Profile";
+import { EditProfile } from "../components/EditProfile/EditProfile";
+import { ShoppingList } from "../components/ShoppingList/ShoppingList";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -52,24 +54,27 @@ export const ApplicationViews = () => {
           path="edit-recipe/:recipeId"
           element={<EditRecipe currentUser={currentUser} />}
         />
-        <Route path="favorites" element={<div>Favorites</div>} />
-        <Route path="profile/:userId" element={<div>Profile</div>} />
-        <Route path="edit-profile/:userId" element={<div>Edit Profile</div>} />
+        <Route
+          path="favorites"
+          element={<Favorites currentUser={currentUser} />}
+        />
+        <Route
+          path="profile/:userId"
+          element={<Profile currentUser={currentUser} />}
+        />
+        <Route
+          path="edit-profile/:userId"
+          element={<EditProfile currentUser={currentUser} />}
+        />
         <Route
           path="roll-for-recipe"
           element={<RollForRecipe currentUser={currentUser} />}
         />
-        <Route path="shopping-list" element={<div>Shopping List</div>} />
+        <Route
+          path="shopping-list"
+          element={<ShoppingList currentUser={currentUser} />}
+        />
       </Route>
     </Routes>
   );
 };
-
-// TODO: Roll for Recipe
-//
-// Recipe Details Like Button?
-// Favorites -- currently hidden in navbar
-// Profile -- currently hidden in navbar
-// Edit Profile
-//
-// Shopping List -- currently hidden in navbar

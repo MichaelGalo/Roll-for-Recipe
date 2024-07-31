@@ -1,4 +1,4 @@
-.MyRecipes {
+.favorites {
   max-width: 600px;
   margin: 20px auto;
   padding: 20px;
@@ -7,7 +7,7 @@
   background-color: #dda15e;
 }
 
-.MyRecipes h2 {
+.favorites h2 {
   color: #333;
   text-align: center;
 }
@@ -17,7 +17,7 @@
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  background-color: #dda15e;
+  background-color: #fefae0;
 }
 
 .recipe h3 {
@@ -50,13 +50,11 @@
   font-size: 1rem;
 }
 
-.card {
-  box-shadow: 0 4px 10px #283618;
-  transition: all 0.3s;
-  border-color: #606c38 !important;
-  border-width: 1.5px !important;
+.favorites .recipe a {
+  color: #606c38 !important;
+  text-decoration: none; /* Optional: Remove underline */
 }
 
-.card:hover {
-  box-shadow: 0 14px 20px #606c38;
+.favorites .recipe a:hover {
+  color: #bc6c25 !important;
 }

@@ -1,0 +1,35 @@
+h2,
+h4 {
+  text-align: center;
+}
+
+.list-group-item {
+  background-color: #606c38 !important;
+  color: #fefae0 !important;
+  width: 50%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.selected-item {
+  background-color: #dda15e !important;
+  text-decoration: line-through !important;
+}
+
+.selected-meals {
+  background-color: #283618 !important;
+  text-decoration: underline !important;
+  color: #fefae0 !important;
+}
+
+.selected-meals-link {
+  color: #fefae0 !important;
+}
+
+.selected-meals-link:hover {
+  color: #dda15e !important;
+}
+
+.selected-meals-container {
+  border: #283618 !important;
+}

@@ -38,10 +38,15 @@ export const AllRecipes = ({
       <ul className="recipe-card">
         {recipes.map((recipe) => (
           <li className="recipe" key={recipe.id}>
-            <h3>
+            <h4>
               <span style={{ fontWeight: "bold" }}></span>{" "}
-              <Link to={`/recipe-details/${recipe.id}`}>{recipe.title}</Link>{" "}
-            </h3>
+              <Link
+                to={`/recipe-details/${recipe.id}`}
+                className="recipe-title"
+              >
+                {recipe.title}
+              </Link>{" "}
+            </h4>
             <p>
               Cuisine:{" "}
               <span style={{ fontWeight: "bold" }}>
@@ -60,5 +65,3 @@ export const AllRecipes = ({
     </Container>
   );
 };
-
-//TODO: number of favorites to track below the author after social stretch goal begins

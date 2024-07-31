@@ -1,0 +1,15 @@
+.like-button {
+  color: #fefae0 !important;
+  border: none !important;
+  padding: 5px 10px !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  margin: 5px !important;
+  width: 4rem !important;
+  background-color: #dda15e !important;
+}
+
+.like-button.liked {
+  background-color: #606c38 !important ;
+  color: #fefae0 !important;
+}

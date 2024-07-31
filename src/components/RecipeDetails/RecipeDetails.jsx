@@ -1,10 +1,14 @@
-import { useParams, Link } from "react-router-dom"; // Added Link import
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getRecipeById } from "../../services/recipeService";
+import {
+  getIngredientsForRecipe,
+  getRecipeById,
+} from "../../services/recipeService";
 import "./RecipeDetails.css";
 import { LikeButton } from "../Buttons/LikeButton";
 import { EditButton } from "../Buttons/EditButton";
-import { Col, Container, Row } from "react-bootstrap";
+import { DeleteButton } from "../Buttons/DeleteButton";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
 const formatRecipeBody = (body) => {
   return body
@@ -15,13 +19,22 @@ const formatRecipeBody = (body) => {
 export const RecipeDetails = ({ currentUser }) => {
   let { recipeId } = useParams();
   const [currentRecipe, setCurrentRecipe] = useState({});
+  const [recipesUpdated, setRecipesUpdated] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
+
+  const handleRecipeUpdate = () => {
+    setRecipesUpdated(!recipesUpdated);
+  };
 
   useEffect(() => {
-    const fetchRecipe = async () => {
-      const recipeData = await getRecipeById(recipeId);
+    const fetchData = async () => {
+      const recipeData = await getRecipeById(parseInt(recipeId));
       setCurrentRecipe(recipeData);
+
+      const ingredientsData = await getIngredientsForRecipe(parseInt(recipeId));
+      setIngredients(ingredientsData);
     };
-    fetchRecipe();
+    fetchData();
   }, [recipeId]);
 
   return (
@@ -33,48 +46,82 @@ export const RecipeDetails = ({ currentUser }) => {
       </Row>
       <Row>
         <Col className="recipe-meta">
+          <p>Published: {currentRecipe.date}</p>
           <p>
-            By:{" "}
+            <strong>Original Chef:</strong>{" "}
             <Link to={`/profile/${currentRecipe.user?.id}`}>
               {currentRecipe.user
                 ? currentRecipe.user.name
                 : "Loading author..."}
             </Link>
           </p>
-          <p>Published: {currentRecipe.date}</p>
           <p>
-            Topic:{" "}
+            <strong>Cuisine:</strong>{" "}
             {currentRecipe.mealType
               ? currentRecipe.mealType.name
               : "Loading cuisine type..."}
           </p>
+          <p>
+            <strong>Time:</strong>{" "}
+            {currentRecipe.time
+              ? currentRecipe.time
+              : "No set prep time for this recipe"}
+          </p>
+          {/* TODO: Add favorites after implementing favorites state
           {currentRecipe.favorites !== undefined && (
-            <p>Favorites: {currentRecipe.favorites}</p>
+            <p>
+              <strong>How many others have favorited this meal:</strong>{" "}
+              {currentRecipe.favorites}
+            </p>
+          )} */}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          {ingredients.length > 0 && (
+            <div>
+              <p>
+                <strong>List of Ingredients:</strong>
+              </p>
+              <ul>
+                {ingredients.map((ingredient, index) => (
+                  <li key={index}>{ingredient.ingredient.name}</li>
+                ))}
+              </ul>
+            </div>
           )}
         </Col>
       </Row>
       <Row>
         <Col>
           <div className="recipe-content">
-            {currentRecipe.body ? formatRecipeBody(currentRecipe.body) : ""}
+            <p>
+              <strong>Instructions:</strong>
+            </p>
+            <ul>
+              {currentRecipe.body ? formatRecipeBody(currentRecipe.body) : ""}
+            </ul>
           </div>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          {currentUser.id !== currentRecipe.userId && (
-            <LikeButton
-              currentRecipe={currentRecipe}
-              currentUser={currentUser}
-            />
-          )}
-          {currentUser.id === currentRecipe.userId && (
-            <EditButton
-              currentUser={currentUser}
-              currentRecipe={currentRecipe}
-            />
-          )}
-        </Col>
+      <Row className="button-container">
+        {currentUser.id !== currentRecipe.userId && (
+          <LikeButton currentRecipe={currentRecipe} currentUser={currentUser} />
+        )}{" "}
+        {currentUser.id === currentRecipe.userId && (
+          <EditButton
+            currentUser={currentUser}
+            currentRecipe={currentRecipe}
+            handleRecipeUpdate={handleRecipeUpdate}
+          />
+        )}
+        {currentUser.id === currentRecipe.userId && (
+          <DeleteButton
+            currentUser={currentUser}
+            currentRecipe={currentRecipe}
+            handleRecipeUpdate={handleRecipeUpdate}
+          />
+        )}
       </Row>
     </Container>
   );

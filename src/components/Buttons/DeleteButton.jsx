@@ -1,13 +1,20 @@
+import { Button } from "react-bootstrap";
 import { deleteRecipe } from "../../services/recipeService";
+import "./DeleteButton.css";
+import { useNavigate } from "react-router-dom";
 
-export const DeleteButton = ({ currentRecipe }) => {
+export const DeleteButton = ({ currentRecipe, handleRecipeUpdate }) => {
+  const navigate = useNavigate();
   const toggleDelete = () => {
-    deleteRecipe(currentRecipe.id);
+    deleteRecipe(currentRecipe.id).then(() => {
+      handleRecipeUpdate();
+      navigate(`/my-recipes`);
+    });
   };
 
   return (
-    <button className="delete-button" onClick={toggleDelete}>
+    <Button size="sm" className="delete-button" onClick={toggleDelete}>
       Delete
-    </button>
+    </Button>
   );
 };

@@ -8,14 +8,22 @@ import { Link } from "react-router-dom";
 
 export const MyRecipes = ({ currentUser }) => {
   const [myRecipes, setMyRecipes] = useState([]);
+  const [recipesUpdated, setRecipesUpdated] = useState(false);
 
   useEffect(() => {
     const fetchMyPosts = async () => {
       const recipesData = await getRecipesByUserId(currentUser.id);
-      setMyRecipes(recipesData);
+      const sortedRecipes = recipesData.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+      setMyRecipes(sortedRecipes);
     };
     fetchMyPosts();
-  }, [currentUser.id, myRecipes]);
+  }, [currentUser.id, recipesUpdated]);
+
+  const handleRecipeUpdate = () => {
+    setRecipesUpdated(!recipesUpdated);
+  };
 
   return (
     <Container className="MyRecipes mt-5">
@@ -38,8 +46,15 @@ export const MyRecipes = ({ currentUser }) => {
                 <Card.Text>Author: {recipe.user.name}</Card.Text>
                 <Card.Text>Number of Favorites: {recipe.favorites}</Card.Text>
                 <Card.Text>Created: {recipe.date}</Card.Text>
-                <DeleteButton currentRecipe={recipe} />{" "}
-                <EditButton currentUser={currentUser} currentRecipe={recipe} />
+                <DeleteButton
+                  currentRecipe={recipe}
+                  handleRecipeUpdate={handleRecipeUpdate}
+                />{" "}
+                <EditButton
+                  currentUser={currentUser}
+                  currentRecipe={recipe}
+                  handleRecipeUpdate={handleRecipeUpdate}
+                />
               </Card.Body>
             </Card>
           </Col>
