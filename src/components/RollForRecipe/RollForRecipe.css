@@ -39,8 +39,13 @@
   padding: 1rem;
   min-width: 250px;
   background-color: #fefae0;
-  border-radius: 5px;
   box-shadow: 0 4px 10px #bc6c25;
+  transition: all 0.3s;
+  border-radius: 5px;
+}
+
+.random-meal:hover {
+  box-shadow: 0 14px 20px #606c38;
 }
 
 @media (max-width: 1024px) {
