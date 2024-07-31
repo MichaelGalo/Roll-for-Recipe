@@ -67,12 +67,13 @@ export const RecipeDetails = ({ currentUser }) => {
               ? currentRecipe.time
               : "No set prep time for this recipe"}
           </p>
+          {/* TODO: Add favorites after implementing favorites state
           {currentRecipe.favorites !== undefined && (
             <p>
               <strong>How many others have favorited this meal:</strong>{" "}
               {currentRecipe.favorites}
             </p>
-          )}
+          )} */}
         </Col>
       </Row>
       <Row>

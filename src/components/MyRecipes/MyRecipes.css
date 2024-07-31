@@ -49,3 +49,14 @@
   text-align: center;
   font-size: 1rem;
 }
+
+.card {
+  box-shadow: 0 4px 10px #283618;
+  transition: all 0.3s;
+  border-color: #606c38 !important;
+  border-width: 1.5px !important;
+}
+
+.card:hover {
+  box-shadow: 0 14px 20px #606c38;
+}

@@ -40,8 +40,14 @@
   padding: 1rem;
   border-radius: 1rem;
   background-color: #dda15e;
-  box-shadow: 0 4px 10px #bc6c25;
+  border-color: #606c38 !important;
+  border-width: 1.5px !important;
+  box-shadow: 0 4px 10px #283618;
   transition: all 0.3s;
+}
+
+.recipe:hover {
+  box-shadow: 0 14px 20px #bc6c25;
 }
 
 a {
