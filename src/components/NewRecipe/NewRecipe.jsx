@@ -194,7 +194,7 @@ export const NewRecipe = ({ currentUser }) => {
           onChange={(e) => setAuthorFavorite(e.target.checked)}
         />
       </Form.Group>
-      <Button variant="primary" type="submit" onClick={handleSave}>
+      <Button variant="secondary" type="submit" onClick={handleSave}>
         Save
       </Button>
     </Form>

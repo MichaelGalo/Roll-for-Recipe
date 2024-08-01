@@ -209,7 +209,7 @@ export const EditRecipe = ({ currentUser }) => {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit" onClick={handleSave}>
+      <Button variant="secondary" type="submit" onClick={handleSave}>
         Save
       </Button>
     </Form>
