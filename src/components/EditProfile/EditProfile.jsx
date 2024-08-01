@@ -79,7 +79,11 @@ export const EditProfile = ({ currentUser }) => {
                     onChange={handleInputChange}
                   />
                 </Form.Group>
-                <Button variant="primary" className="mt-3" onClick={handleSave}>
+                <Button
+                  variant="secondary"
+                  className="mt-3"
+                  onClick={handleSave}
+                >
                   Save
                 </Button>
               </Form>

@@ -1,10 +1,18 @@
 .auth-container {
-  border: 1px solid gray;
+  border: 1px solid #283618;
   margin: 3rem 15rem;
   padding: 2rem;
   border-radius: 1rem;
+  min-width: 320px;
+  box-shadow: 0 4px 16px #283618;
 }
 
+@media (max-width: 768px) {
+  .auth-container {
+    margin: 2rem 2rem;
+    padding: 1rem;
+  }
+}
 .header {
   font-size: 2rem;
 }

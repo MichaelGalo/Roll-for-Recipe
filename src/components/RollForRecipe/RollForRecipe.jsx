@@ -139,7 +139,9 @@ export const RollForRecipe = ({ currentUser }) => {
               </Form.Select>
             </Form.Group>
             <div className="mt-auto d-flex justify-content-center">
-              <Button onClick={handleShowMeals}>Roll!</Button>
+              <Button variant="secondary" onClick={handleShowMeals}>
+                Roll!
+              </Button>
             </div>
           </Form>
         </Col>
