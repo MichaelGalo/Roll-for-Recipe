@@ -11,14 +11,12 @@ export const NavBar = ({ currentUser }) => {
       <Navbar expand="lg" className="customize-navbar">
         <Container>
           <div className="navbar-header">
-            {/* Toggle button */}
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />{" "}
             <Navbar.Brand as={Link} to="/roll-for-recipe">
               Roll for Recipe!
             </Navbar.Brand>
           </div>
           <Navbar.Collapse id="responsive-navbar-nav">
-            {/* Collapsible content */}
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">
                 Home

@@ -31,7 +31,7 @@ export const NewRecipe = ({ currentUser }) => {
     fetchCategories();
   }, []);
 
-  //specifically targets the values of the ingredient name and quantities
+  // specifically targets the values of the ingredient name and quantities
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
     newIngredients[index][event.target.name] = event.target.value;

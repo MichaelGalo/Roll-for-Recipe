@@ -4,7 +4,6 @@ import { Button } from "react-bootstrap";
 import "./EditButton.css";
 
 export const EditButton = ({ currentRecipe, handleRecipeUpdate }) => {
-  // navigate to EditRecipe component
   const navigate = useNavigate();
   const toggleEdit = () => {
     handleRecipeUpdate();
