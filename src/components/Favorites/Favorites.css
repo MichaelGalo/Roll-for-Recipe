@@ -52,7 +52,7 @@
 
 .favorites .recipe a {
   color: #606c38 !important;
-  text-decoration: none; /* Optional: Remove underline */
+  text-decoration: none;
 }
 
 .favorites .recipe a:hover {

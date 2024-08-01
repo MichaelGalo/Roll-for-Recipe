@@ -1,4 +1,3 @@
-// this module is where I need to set up my routes for login, register, and *
 import { Route, Routes } from "react-router-dom";
 import { Login } from "./components/auth/Login";
 import { Register } from "./components/auth/Register";

@@ -109,7 +109,6 @@ export const EditRecipe = ({ currentUser }) => {
       className="NewRecipeForm"
       onSubmit={(e) => {
         e.preventDefault();
-        // handleSave();
       }}
     >
       <Form.Label id="new-recipe-title">Edit Recipe</Form.Label>

@@ -25,7 +25,7 @@ export const ShoppingList = () => {
       // Flatten the array of arrays into a single array of ingredients
       const allIngredients = ingredientsArrays.flat();
 
-      // Combine ingredients based on their names and sum their quantities
+      // Combine ingredients based on their names and their quantities
       const combinedIngredients = allIngredients.reduce((acc, ingredient) => {
         // Check if the ingredient already exists in the accumulator array
         const existingIngredient = acc.find(
@@ -33,14 +33,11 @@ export const ShoppingList = () => {
         );
 
         if (existingIngredient) {
-          // If the ingredient exists, increment the quantity
           existingIngredient.quantity += ingredient.quantity;
         } else {
           // If the ingredient does not exist, add it to the accumulator array
           acc.push({ ...ingredient });
         }
-
-        // Return the accumulator array for the next iteration
         return acc;
       }, []);
       setIngredients(combinedIngredients);
@@ -74,7 +71,6 @@ export const ShoppingList = () => {
     return acc;
   }, {});
 
-  // create function to change the color of the list item if a user clicks on it
   const changeColor = (ingredientId) => {
     setClickedItems((prevClickedItems) => ({
       ...prevClickedItems,
@@ -147,4 +143,4 @@ export const ShoppingList = () => {
   );
 };
 
-// {ingredient.unit} could be a useful bit of info
+// {ingredient.unit} could be a useful bit of info for a feature to add later

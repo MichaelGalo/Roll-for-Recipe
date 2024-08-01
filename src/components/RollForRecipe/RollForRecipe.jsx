@@ -45,7 +45,7 @@ export const RollForRecipe = ({ currentUser }) => {
       }
     });
 
-    const uniqueMeals = Array.from(mealMap.values());
+    const uniqueMeals = Array.from(mealMap.values()); // only returns the values of the unique map keys
     const result = [];
 
     for (

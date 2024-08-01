@@ -8,7 +8,6 @@ export const IngredientDropdown = ({ onSelect, value }) => {
 
   useEffect(() => {
     fetchIngredients().then((data) => {
-      // Sort ingredients alphabetically by name
       const sortedIngredients = data.sort((a, b) =>
         a.name.localeCompare(b.name)
       );

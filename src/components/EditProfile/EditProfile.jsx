@@ -13,7 +13,6 @@ export const EditProfile = ({ currentUser }) => {
 
   const navigate = useNavigate();
 
-  // Fetch user data on component mount
   useEffect(() => {
     const fetchUser = async () => {
       if (currentUser && currentUser.id) {

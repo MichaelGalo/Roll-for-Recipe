@@ -92,27 +92,24 @@ export const getRecipeByUserId = async (userId) => {
   ).then((res) => res.json());
 };
 
-// export function to grab the favorite authored meals by user id
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
   return await fetch(
     `http://localhost:8088/recipes?userId=${userId}&authorFavorite=true&_expand=user&_expand=mealType`
   ).then((res) => res.json());
 };
-// export function to grab the favorite non-author meals by user id
+
 export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   return await fetch(
     `http://localhost:8088/recipeLikes?userId=${userId}&_expand=recipe`
   ).then((res) => res.json());
 };
 
-// export function to get recipeLikes by recipeId and userId
 export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
   return await fetch(
     `http://localhost:8088/recipeLikes?recipeId=${recipeId}&userId=${userId}`
   ).then((res) => res.json());
 };
 
-// export function to get recipeLikes by recipeId
 export const likeRecipe = async (recipeId, userId) => {
   // First, create the like
   const newLike = await fetch(`http://localhost:8088/recipeLikes`, {
@@ -135,7 +132,6 @@ export const likeRecipe = async (recipeId, userId) => {
   return newLike;
 };
 
-// export function to unlike a recipe
 export const unlikeRecipe = async (likeId, recipeId) => {
   // First, delete the like
   await fetch(`http://localhost:8088/recipeLikes/${likeId}`, {

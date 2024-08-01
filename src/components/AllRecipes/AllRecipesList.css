@@ -1,4 +1,3 @@
-/* Styles for the container and elements within your return value */
 .recipe-card-background {
   display: flex;
   flex-direction: column;
@@ -11,21 +10,16 @@
   margin-bottom: 20px;
 }
 
-/* Assuming FilterBar is a component that renders a div or form, you can target it directly if it has a class or style it through its parent div here. Adjust based on your actual structure. */
 .recipe-card-background > div:first-child {
   width: 100%;
-  max-width: 600px; /* Adjust based on your design */
+  max-width: 600px;
   margin-bottom: 20px;
 }
 
-/* Styles for the AllRecipes component */
 .recipe-card-background > div:nth-child(3) {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(250px, 1fr)
-  ); /* Adjust min and max values based on your card size */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   width: 100%;
-  max-width: 1200px; /* Adjust based on your design */
+  max-width: 1200px;
 }

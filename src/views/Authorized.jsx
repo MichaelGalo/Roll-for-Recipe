@@ -1,5 +1,3 @@
-// this module is one that I'll like need to more or less copy and paste from learning-moments / update with the one steve did (death and money)
-
 import { Navigate, useLocation } from "react-router-dom";
 
 // We can access child components the same way we access props. Child components are passed to our props as a key/value pair where
