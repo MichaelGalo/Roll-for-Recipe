@@ -37,15 +37,16 @@ export const RollForRecipe = ({ currentUser }) => {
   }, [currentUser]);
 
   const randomizeMeals = () => {
-    const mealMap = new Map();
+    const uniqueMealIds = new Set();
+    const uniqueMeals = [];
+
     favoriteMeals.forEach((meal) => {
-      if (meal) {
-        const key = meal.id || meal.recipeId;
-        if (key) mealMap.set(key, meal);
+      if (meal && meal.id && !uniqueMealIds.has(meal.id)) {
+        uniqueMealIds.add(meal.id);
+        uniqueMeals.push(meal);
       }
     });
 
-    const uniqueMeals = Array.from(mealMap.values()); // only returns the values of the unique map keys
     const result = [];
 
     for (
