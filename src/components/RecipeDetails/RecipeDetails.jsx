@@ -35,7 +35,8 @@ export const RecipeDetails = ({ currentUser }) => {
       setIngredients(ingredientsData);
     };
     fetchData();
-  }, [recipeId, handleRecipeUpdate]);
+  }, [recipeId, recipesUpdated]);
+
 
   return (
     <Container className="recipe-details">
