@@ -35,29 +35,26 @@
 // Firebase version of the above functions
 ////////////////////////////////////////////
 
-import { ref, push, get, update, remove, query, orderByChild, equalTo } from "firebase/database";
+import { ref, set, push, get, update, remove, query, orderByChild, equalTo } from "firebase/database";
 import { database } from "../../firebase"; // import the initialized Firebase database
 
 // Get User by Email
 export const getUserByEmail = async (email) => {
-  const usersRef = ref(database, "users"); // reference to 'users' collection
-  const emailQuery = query(usersRef, orderByChild("email"), equalTo(email));
-  const snapshot = await get(emailQuery);
-
+  const userRef = ref(database, 'users');
+  const userQuery = query(userRef, orderByChild('email'), equalTo(email));
+  const snapshot = await get(userQuery);
   if (snapshot.exists()) {
-    const data = snapshot.val();
-    const userId = Object.keys(data)[0]; // get the first user found (assuming unique emails)
-    return { id: userId, ...data[userId] }; // return the user with ID
+    return Object.values(snapshot.val()); // Return array of user objects
   } else {
-    return null; // no user found
+    return [];
   }
 };
 
 // Create User
 export const createUser = async (user) => {
-  const usersRef = ref(database, "users"); // reference to 'users' collection
-  const newUserRef = await push(usersRef, user); // push new user to database
-  return { id: newUserRef.key, ...user }; // return created user with generated ID
+  const userRef = ref(database, 'users/' + user.email.replace(/\./g, '_')); // Use email as the key, replacing periods
+  await set(userRef, user);
+  return { id: user.email }; // Assuming email as a unique identifier
 };
 
 // Get User by ID
