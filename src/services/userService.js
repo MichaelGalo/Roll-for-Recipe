@@ -36,7 +36,7 @@
 ////////////////////////////////////////////
 
 import { ref, push, get, update, remove, query, orderByChild, equalTo } from "firebase/database";
-import { database } from "./firebase"; // import the initialized Firebase database
+import { database } from "../../firebase"; // import the initialized Firebase database
 
 // Get User by Email
 export const getUserByEmail = async (email) => {

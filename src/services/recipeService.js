@@ -156,7 +156,7 @@
 ////////////////////////////////////////////
 
 import { ref, push, get, update, remove, query, orderByChild, equalTo, child } from "firebase/database";
-import { database } from "./firebase"; // import the initialized Firebase database
+import { database } from "../../firebase"; // import the initialized Firebase database
 
 // Get All Recipes
 export const getAllRecipes = async () => {

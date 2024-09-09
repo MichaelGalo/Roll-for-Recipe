@@ -86,7 +86,7 @@
 ////////////////////////////////////////////
 
 import { ref, get, update, remove, push, query, orderByChild, equalTo } from "firebase/database";
-import { database } from "./firebase"; // import the initialized Firebase database
+import { database } from "../../firebase"; // import the initialized Firebase database
 import { getIngredientsForRecipe } from "./recipeService"; // assuming this is still used
 
 // Fetch Ingredients

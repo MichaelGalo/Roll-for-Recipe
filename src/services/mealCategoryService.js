@@ -9,7 +9,7 @@
 ////////////////////////////////////////////
 
 import { ref, get } from "firebase/database";
-import { database } from "./firebase"; // import the initialized Firebase database
+import { database } from "../../firebase"; // import the initialized Firebase database
 
 // Get Meal Categories
 export const getMealCategories = async () => {
