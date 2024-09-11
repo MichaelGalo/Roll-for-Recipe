@@ -13,7 +13,6 @@ export const FirebaseLogin = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("Email login successful");
       navigate("/");
     } catch (error) {
       console.error("Error during email login:", error);
@@ -24,7 +23,6 @@ export const FirebaseLogin = () => {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      console.log("Google login successful");
       navigate("/");
     } catch (error) {
       console.error("Error during Google sign-in:", error);

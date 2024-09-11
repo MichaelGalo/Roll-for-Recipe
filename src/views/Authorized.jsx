@@ -33,6 +33,13 @@ export const Authorized = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
+
+        localStorage.setItem(
+          "recipe_token",
+          JSON.stringify({
+            id: user.uid,
+          })
+        );
       } else {
         setIsAuthenticated(false);
       }
