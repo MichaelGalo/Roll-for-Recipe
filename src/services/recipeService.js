@@ -212,7 +212,7 @@ export const addRecipe = async (recipe) => {
 // Add Ingredients
 export const addIngredients = async (recipeId, ingredients) => {
   const ingredientsRef = ref(database, "ingredientsForRecipe");
-  
+
   const formattedIngredients = ingredients
     .filter((ingredient) => ingredient.ingredientId && ingredient.quantity)
     .map((ingredient) => ({
@@ -226,7 +226,7 @@ export const addIngredients = async (recipeId, ingredients) => {
   );
 
   const responses = await Promise.all(promises);
-  return responses.map((response) => ({ id: response.key, ...ingredient })); // return list of added ingredients
+  return responses.map((response, index) => ({ id: response.key, ...formattedIngredients[index] })); // return list of added ingredients
 };
 
 // Get Ingredients for Recipe

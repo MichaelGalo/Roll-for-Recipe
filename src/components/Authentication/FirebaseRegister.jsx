@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { auth, googleProvider, signInWithPopup, createUserWithEmailAndPassword } from "../../../firebase";
 import { useFirebase } from "../../services/firebaseService"
 import "../auth/Login.css"
+import { useNavigate } from 'react-router-dom';
 
 export const FirebaseRegister = () => {
   const [firstName, setFirstName] = useState('');
@@ -9,6 +10,7 @@ export const FirebaseRegister = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { addData } = useFirebase();
+  const navigate = useNavigate();
 
   const handleGoogleSignIn = async () => {
     try {
@@ -16,6 +18,7 @@ export const FirebaseRegister = () => {
       const user = result.user;
       await addData(`users/${user.uid}`, { email: user.email, displayName: user.displayName });
       alert('Google sign-in successful');
+      navigate('/');
     } catch (error) {
       console.error('Error during Google sign-in:', error);
       alert('Google sign-in failed');
@@ -33,7 +36,7 @@ export const FirebaseRegister = () => {
         lastName: lastName
       });
       alert('Email sign-up successful');
-      // TODO: need to redirect to the home page if succesful
+      navigate('/');
     } catch (error) {
       console.error('Error during email sign-up:', error);
       alert('Email sign-up failed');

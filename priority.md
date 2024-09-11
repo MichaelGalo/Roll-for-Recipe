@@ -1,4 +1,6 @@
-<!-- TODO: Figure out authentication for firebase & refactor the necessary components -->
+<!-- TODO: Seed & Update Database in Firebase -->
+
+
 <!-- TODO: Create Data to the Database -->
 <!-- TODO: Read Data to the Database -->
 <!-- TODO: Update Data to the Database -->
