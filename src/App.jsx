@@ -6,12 +6,13 @@ import { ApplicationViews } from "./views/ApplicationViews";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { MealProvider } from "./components/Context/MealContext";
 import { FirebaseRegister } from "./components/Authentication/FirebaseRegister";
+import { FirebaseLogin } from "./components/Authentication/FirebaseLogin";
 
 export const App = () => {
   return (
     <MealProvider>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<FirebaseLogin />} />
         <Route path="/register" element={<>  <FirebaseRegister/> </>} />
         <Route
           path="*"
@@ -28,3 +29,4 @@ export const App = () => {
 
 
 // unused Original <Register /> component
+// unused Original <Login /> component
