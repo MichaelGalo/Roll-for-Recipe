@@ -33,6 +33,7 @@ export const FirebaseRegister = () => {
         lastName: lastName
       });
       alert('Email sign-up successful');
+      // TODO: need to redirect to the home page if succesful
     } catch (error) {
       console.error('Error during email sign-up:', error);
       alert('Email sign-up failed');
@@ -42,8 +43,8 @@ export const FirebaseRegister = () => {
   return (
     <main className="auth-container">
       <form className="auth-form" onSubmit={handleEmailSignUp}>
+      <h1 className="header">Roll for Recipe</h1>
         <h2>Register</h2>
-        <button type="button" onClick={handleGoogleSignIn} className="auth-button">Sign in with Google</button>
         <fieldset>
           <legend>Sign up with Email</legend>
           <div className="form-group">
@@ -93,6 +94,8 @@ export const FirebaseRegister = () => {
           <button type="submit" className="auth-button">Sign Up</button>
         </fieldset>
       </form>
+        <h2>OR</h2>
+        <button type="button" onClick={handleGoogleSignIn} className="auth-button">Sign in with Google</button>
     </main>
   );
 };

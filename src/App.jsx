@@ -12,7 +12,7 @@ export const App = () => {
     <MealProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<> <Register /> <FirebaseRegister/> </>} />
+        <Route path="/register" element={<>  <FirebaseRegister/> </>} />
         <Route
           path="*"
           element={
@@ -25,3 +25,6 @@ export const App = () => {
     </MealProvider>
   );
 };
+
+
+// unused Original <Register /> component
