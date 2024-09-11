@@ -6,8 +6,8 @@ import "./EditButton.css";
 export const EditButton = ({ currentRecipe, handleRecipeUpdate }) => {
   const navigate = useNavigate();
   const toggleEdit = () => {
-    handleRecipeUpdate();
     navigate(`/edit-recipe/${currentRecipe.id}`);
+    handleRecipeUpdate();
   };
 
   return (
