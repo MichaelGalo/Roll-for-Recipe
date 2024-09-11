@@ -12,5 +12,6 @@ export const handleLogout = () => {
   const navigate = useNavigate();
   localStorage.removeItem("recipe_token");
   localStorage.removeItem("user");
+  localStorage.removeItem("firebase:host:roll-for-recipe-default-rtdb.firebaseio.com");
   navigate("/login", { replace: true });
 };

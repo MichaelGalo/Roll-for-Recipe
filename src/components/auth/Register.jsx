@@ -10,13 +10,14 @@ export const Register = (props) => {
   });
   let navigate = useNavigate();
 
-  const registerNewUser = () => {
+  const registerNewUser = async () => {
     const newUser = {
       ...user,
     };
 
-    createUser(newUser).then((createdUser) => {
-      if (createdUser.hasOwnProperty("id")) {
+    try {
+      const createdUser = await createUser(newUser);
+      if (createdUser.id) {
         localStorage.setItem(
           "recipe_token",
           JSON.stringify({
@@ -24,23 +25,29 @@ export const Register = (props) => {
             staff: createdUser.isStaff,
           })
         );
-
         navigate("/");
       }
-    });
+    } catch (error) {
+      console.error("Error creating user:", error);
+      window.alert("Error creating user. Please try again.");
+    }
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    getUserByEmail(user.email).then((response) => {
+    try {
+      const response = await getUserByEmail(user.email);
       if (response.length > 0) {
         // Duplicate email. No good.
         window.alert("Account with that email address already exists");
       } else {
         // Good email, create user.
-        registerNewUser();
+        await registerNewUser();
       }
-    });
+    } catch (error) {
+      console.error("Error checking user email:", error);
+      window.alert("Error checking user email. Please try again.");
+    }
   };
 
   const updateUser = (evt) => {

@@ -19,8 +19,10 @@ export const ApplicationViews = () => {
 
   useEffect(() => {
     const localRecipeUser = localStorage.getItem("recipe_token");
-    setCurrentUser(JSON.parse(localRecipeUser));
+    const parsedUser = JSON.parse(localRecipeUser);
+    setCurrentUser(parsedUser);
   }, []);
+  
 
   return (
     <Routes>
