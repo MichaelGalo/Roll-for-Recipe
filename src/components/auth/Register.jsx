@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import { createUser, getUserByEmail } from "../../services/userService";
 
+//TODO: possible issue with email/name vs. email/password
+
 export const Register = (props) => {
   const [user, setUser] = useState({
     email: "",
