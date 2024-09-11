@@ -177,9 +177,31 @@ export const getRecipesByUserId = async (userId) => {
   const snapshot = await get(recipesQuery);
 
   if (snapshot.exists()) {
-    return snapshot.val(); // return recipes for the user
+    const recipes = snapshot.val();
+    const recipeArray = Object.values(recipes); // Convert object to array
+
+    // Fetch user and mealType details for each recipe
+    const expandedRecipes = await Promise.all(
+      recipeArray.map(async (recipe) => {
+        const userRef = ref(database, `users/${recipe.userId}`);
+        const mealTypeRef = ref(database, `mealTypes/${recipe.mealTypeId}`);
+
+        const [userSnapshot, mealTypeSnapshot] = await Promise.all([
+          get(userRef),
+          get(mealTypeRef),
+        ]);
+
+        return {
+          ...recipe,
+          user: userSnapshot.exists() ? userSnapshot.val() : null,
+          mealType: mealTypeSnapshot.exists() ? mealTypeSnapshot.val() : null,
+        };
+      })
+    );
+
+    return expandedRecipes;
   } else {
-    return []; // return an empty array if no recipes found
+    return []; 
   }
 };
 

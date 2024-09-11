@@ -13,13 +13,15 @@ export const MyRecipes = ({ currentUser }) => {
   useEffect(() => {
     const fetchMyPosts = async () => {
       const recipesData = await getRecipesByUserId(currentUser.id);
-      const sortedRecipes = recipesData.sort((a, b) =>
+      const recipesArray = Object.values(recipesData);
+      const sortedRecipes = recipesArray.sort((a, b) =>
         a.title.localeCompare(b.title)
       );
       setMyRecipes(sortedRecipes);
     };
     fetchMyPosts();
   }, [currentUser.id, recipesUpdated]);
+  
 
   const handleRecipeUpdate = () => {
     setRecipesUpdated(!recipesUpdated);
@@ -43,7 +45,7 @@ export const MyRecipes = ({ currentUser }) => {
                   </Link>
                 </Card.Title>
                 <Card.Text>Cuisine: {recipe.mealType?.name}</Card.Text>
-                <Card.Text>Author: {recipe.user.name}</Card.Text>
+                <Card.Text>Author: {recipe.user?.displayName}</Card.Text>
                 <Card.Text>Number of Favorites: {recipe.favorites}</Card.Text>
                 <Card.Text>Created: {recipe.date}</Card.Text>
                 <DeleteButton
