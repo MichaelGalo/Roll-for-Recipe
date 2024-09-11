@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export const FirebaseRegister = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { addData } = useFirebase();
@@ -33,7 +34,8 @@ export const FirebaseRegister = () => {
       await addData(`users/${user.uid}`, { 
         email: user.email,
         firstName: firstName,
-        lastName: lastName
+        lastName: lastName,
+        displayName: displayName
       });
       alert('Email sign-up successful');
       navigate('/');
@@ -50,6 +52,17 @@ export const FirebaseRegister = () => {
         <h2>Register</h2>
         <fieldset>
           <legend>Sign up with Email</legend>
+          <div className="form-group">
+            <label htmlFor="lastName">Username:</label>
+            <input
+              type="text"
+              id="displayName"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              required
+              className="form-control"
+            />
+          </div>
           <div className="form-group">
             <label htmlFor="firstName">First Name:</label>
             <input

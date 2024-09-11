@@ -4,18 +4,6 @@
 //   return recipes;
 // };
 
-// export const getRecipesByUserId = async (userId) => {
-//   return await fetch(
-//     `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealType`
-//   ).then((res) => res.json());
-// };
-
-// export const getRecipeById = async (id) => {
-//   return await fetch(
-//     `http://localhost:8088/recipes/${id}?_expand=user&_expand=mealType`
-//   ).then((res) => res.json());
-// };
-
 // export const updateRecipe = async (recipe) => {
 //   return await fetch(`http://localhost:8088/recipes/${recipe.id}`, {
 //     method: "PUT",
