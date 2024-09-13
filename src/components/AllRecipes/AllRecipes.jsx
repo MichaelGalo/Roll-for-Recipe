@@ -25,7 +25,7 @@ export const AllRecipes = ({
         const authorDetails = await Promise.all(authorDetailsPromises);
 
         const authorMap = authorDetails.reduce((acc, author) => {
-          const authorId = author.id || author.userId; // Adjust this line based on the actual structure
+          const authorId = author.id || author.userId; 
           acc[authorId] = author.displayName; // Use displayName instead of name
           return acc;
         }, {});
