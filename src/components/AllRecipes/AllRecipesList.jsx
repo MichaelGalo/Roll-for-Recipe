@@ -26,7 +26,13 @@ export const AllRecipesList = ({ currentUser }) => {
         getAllRecipes(),
       ]);
 
-      const sortedAllRecipes = allRecipesData.sort((a, b) =>
+        // Convert the object to an array of recipes
+        const recipesArray = Object.entries(allRecipesData).map(([id, recipe]) => ({
+          id,
+          ...recipe,
+        }));
+
+      const sortedAllRecipes = recipesArray.sort((a, b) =>
         a.title.localeCompare(b.title)
       );
 

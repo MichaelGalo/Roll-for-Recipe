@@ -143,83 +143,83 @@
 // Firebase version of the above functions
 ////////////////////////////////////////////
 
-import { ref, push, get, update, remove, query, orderByChild, equalTo, child } from "firebase/database";
-import { database } from "../../firebase"; // import the initialized Firebase database
+import { ref, push, get, update, remove, query, orderByChild, equalTo } from "firebase/database";
+import { database } from "../../firebase"; // Make sure this path is correct
 
-// Get All Recipes
+// Helper function to normalize recipe object
+const normalizeRecipe = (key, recipe) => {
+  if (!recipe) {
+    console.error(`Attempted to normalize undefined recipe with key ${key}`);
+    return null;
+  }
+
+  if (recipe.id) {
+    // Case where 'id' is nested inside the recipe object
+    return { ...recipe, id: recipe.id };
+  } else {
+    // Case where Firebase-generated key is the id
+    return { ...recipe, id: key };
+  }
+};
+
 export const getAllRecipes = async () => {
-  const recipesRef = ref(database, "recipes"); // reference to 'recipes' collection
+  const recipesRef = ref(database, "recipes");
   const snapshot = await get(recipesRef);
 
   if (snapshot.exists()) {
-    return snapshot.val(); // return all recipes
-  } else {
-    return []; // return an empty array if no recipes found
-  }
-};
-
-// Get Recipes by User ID
-export const getRecipesByUserId = async (userId) => {
-  const recipesRef = ref(database, "recipes");
-  const recipesQuery = query(recipesRef, orderByChild("userId"), equalTo(userId));
-  const snapshot = await get(recipesQuery);
-
-  if (snapshot.exists()) {
     const recipes = snapshot.val();
-    const recipeArray = Object.values(recipes); // Convert object to array
-
-    // Fetch user and mealType details for each recipe
-    const expandedRecipes = await Promise.all(
-      recipeArray.map(async (recipe) => {
-        const userRef = ref(database, `users/${recipe.userId}`);
-        const mealTypeRef = ref(database, `mealTypes/${recipe.mealTypeId}`);
-
-        const [userSnapshot, mealTypeSnapshot] = await Promise.all([
-          get(userRef),
-          get(mealTypeRef),
-        ]);
-
-        return {
-          ...recipe,
-          user: userSnapshot.exists() ? userSnapshot.val() : null,
-          mealType: mealTypeSnapshot.exists() ? mealTypeSnapshot.val() : null,
-        };
-      })
-    );
-
-    return expandedRecipes;
+    return Object.entries(recipes)
+      .map(([key, recipe]) => normalizeRecipe(key, recipe))
+      .filter(recipe => recipe !== null);
   } else {
-    return []; 
+    return [];
   }
 };
 
-// Get Recipe by ID
+export const getRecipesByUserId = async (userId) => {
+
+  try {
+    const recipesRef = ref(database, "recipes");
+    const recipesQuery = query(recipesRef, orderByChild("userId"), equalTo(userId));
+    const snapshot = await get(recipesQuery);
+
+    if (snapshot.exists()) {
+      const recipes = snapshot.val();
+      return Object.entries(recipes).map(([key, recipe]) => normalizeRecipe(key, recipe));
+    } else {
+      console.log(`No recipes found for user ${userId}`);
+      return [];
+    }
+  } catch (error) {
+    console.error("Error in getRecipesByUserId:", error);
+    return [];
+  }
+};
+
 export const getRecipeById = async (id) => {
-  const recipeRef = ref(database, `recipes/${id}`); // reference to specific recipe by ID
+  const recipeRef = ref(database, `recipes/${id}`);
   const snapshot = await get(recipeRef);
 
   if (snapshot.exists()) {
-    return snapshot.val(); // return recipe data
+    return normalizeRecipe(id, snapshot.val());
   } else {
-    return null; // recipe not found
+    return null;
   }
 };
 
-// Update Recipe
 export const updateRecipe = async (recipe) => {
-  const recipeRef = ref(database, `recipes/${recipe.id}`); // reference to specific recipe by ID
-  await update(recipeRef, recipe); // update recipe data
-  return recipe; // return updated recipe data
+  const { id, ...updateData } = recipe;
+  const recipeRef = ref(database, `recipes/${id}`);
+  await update(recipeRef, updateData);
+  return recipe;
 };
 
-// Add Recipe
 export const addRecipe = async (recipe) => {
-  const recipesRef = ref(database, "recipes"); // reference to 'recipes' collection
-  const newRecipeRef = await push(recipesRef, recipe); // push new recipe to database
-  return { id: newRecipeRef.key, ...recipe }; // return created recipe with generated ID
+  const recipesRef = ref(database, "recipes");
+  const newRecipeRef = await push(recipesRef, recipe);
+  return normalizeRecipe(newRecipeRef.key, recipe);
 };
 
-// Add Ingredients
 export const addIngredients = async (recipeId, ingredients) => {
   const ingredientsRef = ref(database, "ingredientsForRecipe");
 
@@ -236,38 +236,40 @@ export const addIngredients = async (recipeId, ingredients) => {
   );
 
   const responses = await Promise.all(promises);
-  return responses.map((response, index) => ({ id: response.key, ...formattedIngredients[index] })); // return list of added ingredients
+  return responses.map((response, index) => ({ 
+    id: response.key, 
+    ...formattedIngredients[index] 
+  }));
 };
 
-// Get Ingredients for Recipe
 export const getIngredientsForRecipe = async (recipeId) => {
   const ingredientsRef = ref(database, "ingredientsForRecipe");
   const ingredientsQuery = query(ingredientsRef, orderByChild("recipeId"), equalTo(recipeId));
   const snapshot = await get(ingredientsQuery);
 
   if (snapshot.exists()) {
-    return snapshot.val(); // return ingredients for the recipe
+    return Object.entries(snapshot.val()).map(([key, ingredient]) => ({
+      id: ingredient.id || key,
+      ...ingredient
+    }));
   } else {
-    return []; // return an empty array if no ingredients found
+    return [];
   }
 };
 
-// Delete Recipe
 export const deleteRecipe = async (id) => {
   const ingredients = await getIngredientsForRecipe(id);
-  const deletePromises = Object.keys(ingredients).map((ingredientId) =>
-    remove(ref(database, `ingredientsForRecipe/${ingredientId}`))
+  const deletePromises = ingredients.map((ingredient) =>
+    remove(ref(database, `ingredientsForRecipe/${ingredient.id}`))
   );
-  // Wait for all ingredient deletions to complete
   await Promise.all(deletePromises);
 
   const recipeRef = ref(database, `recipes/${id}`);
-  await remove(recipeRef); // delete recipe from the database
+  await remove(recipeRef);
 
-  return { id }; // return the deleted recipe ID
+  return { id };
 };
 
-// Get Favorite Author Meals by User ID
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
   const recipesRef = ref(database, "recipes");
   const recipesQuery = query(recipesRef, orderByChild("userId"), equalTo(userId));
@@ -275,13 +277,14 @@ export const getFavoriteAuthorMealsByUserId = async (userId) => {
 
   if (snapshot.exists()) {
     const recipes = snapshot.val();
-    return Object.values(recipes).filter(recipe => recipe.authorFavorite); // return favorite author meals
+    return Object.entries(recipes)
+      .filter(([_, recipe]) => recipe.authorFavorite)
+      .map(([key, recipe]) => normalizeRecipe(key, recipe));
   } else {
-    return []; // return an empty array if no favorite meals found
+    return [];
   }
 };
 
-// Get Favorite Non-Author Meals by User ID
 export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   const likesRef = ref(database, "recipeLikes");
   const likesQuery = query(likesRef, orderByChild("userId"), equalTo(userId));
@@ -290,21 +293,16 @@ export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   if (snapshot.exists()) {
     const likes = snapshot.val();
     const recipeIds = Object.values(likes).map(like => like.recipeId);
-    const recipesRef = ref(database, "recipes");
-    const recipesQuery = query(recipesRef, orderByChild("id"), equalTo(recipeIds));
-    const recipesSnapshot = await get(recipesQuery);
-
-    if (recipesSnapshot.exists()) {
-      return recipesSnapshot.val(); // return favorite non-author meals
-    } else {
-      return []; // return an empty array if no favorite meals found
-    }
+    
+    const recipesPromises = recipeIds.map(recipeId => getRecipeById(recipeId));
+    const recipes = await Promise.all(recipesPromises);
+    
+    return recipes.filter(recipe => recipe !== null);
   } else {
-    return []; // return an empty array if no likes found
+    return [];
   }
 };
 
-// Get Recipe Likes by Recipe ID and User ID
 export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
   const likesRef = ref(database, "recipeLikes");
   const likesQuery = query(likesRef, orderByChild("recipeId"), equalTo(recipeId));
@@ -312,43 +310,38 @@ export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
 
   if (snapshot.exists()) {
     const likes = snapshot.val();
-    return Object.values(likes).filter(like => like.userId === userId); // return likes for the recipe and user
+    return Object.entries(likes)
+      .filter(([_, like]) => like.userId === userId)
+      .map(([key, like]) => ({ id: like.id || key, ...like }));
   } else {
-    return []; // return an empty array if no likes found
+    return [];
   }
 };
 
-// Like Recipe
 export const likeRecipe = async (recipeId, userId) => {
   const newLike = await push(ref(database, "recipeLikes"), { recipeId, userId });
   
-  // Get the current recipe and update the favorites count
   const recipe = await getRecipeById(recipeId);
   const updatedRecipe = {
     ...recipe,
     favorites: (recipe.favorites || 0) + 1,
   };
   
-  // Save the updated recipe
   await updateRecipe(updatedRecipe);
 
-  return { id: newLike.key, recipeId, userId }; // return the new like object
+  return { id: newLike.key, recipeId, userId };
 };
 
-// Unlike Recipe
 export const unlikeRecipe = async (likeId, recipeId) => {
-  // Delete the like
   await remove(ref(database, `recipeLikes/${likeId}`));
   
-  // Get the current recipe and update the favorites count
   const recipe = await getRecipeById(recipeId);
   const updatedRecipe = {
     ...recipe,
-    favorites: Math.max((recipe.favorites || 0) - 1, 0), // Ensure it doesn't go below 0
+    favorites: Math.max((recipe.favorites || 0) - 1, 0),
   };
   
-  // Save the updated recipe
   await updateRecipe(updatedRecipe);
 
-  return updatedRecipe; // return the updated recipe
+  return updatedRecipe;
 };

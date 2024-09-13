@@ -12,20 +12,27 @@ export const AllRecipes = ({
 }) => {
   const [authors, setAuthors] = useState({});
 
-  // must learn to understand this even more. Reduce is so strange, but works perfectly here.
   useEffect(() => {
     const fetchAuthors = async () => {
-      const authorIds = recipes.map((recipe) => recipe.userId);
-      const uniqueAuthorIds = [...new Set(authorIds)]; // Remove duplicates
-      const authorDetailsPromises = uniqueAuthorIds.map((id) =>
-        getUserById(id)
-      );
-      const authorDetails = await Promise.all(authorDetailsPromises);
-      const authorMap = authorDetails.reduce((acc, author) => {
-        acc[author.id] = author.name;
-        return acc;
-      }, {});
-      setAuthors(authorMap);
+      try {
+        const authorIds = recipes.map((recipe) => recipe.userId);
+        const uniqueAuthorIds = [...new Set(authorIds)]; // Remove duplicates
+
+        const authorDetailsPromises = uniqueAuthorIds.map((id) => {
+          return getUserById(id);
+        });
+
+        const authorDetails = await Promise.all(authorDetailsPromises);
+
+        const authorMap = authorDetails.reduce((acc, author) => {
+          const authorId = author.id || author.userId; // Adjust this line based on the actual structure
+          acc[authorId] = author.displayName; // Use displayName instead of name
+          return acc;
+        }, {});
+        setAuthors(authorMap);
+      } catch (error) {
+        console.error("Error fetching authors:", error);
+      }
     };
 
     if (recipes.length > 0) {
@@ -65,3 +72,5 @@ export const AllRecipes = ({
     </Container>
   );
 };
+
+

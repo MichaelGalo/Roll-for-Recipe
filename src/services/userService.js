@@ -63,7 +63,8 @@ export const getUserById = async (id) => {
   const snapshot = await get(userRef);
 
   if (snapshot.exists()) {
-    return snapshot.val(); // return user data
+    const userData = snapshot.val();
+    return { ...userData, id }; // return user data with id
   } else {
     return null; // user not found
   }
