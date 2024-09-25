@@ -8,6 +8,10 @@ Roll-for-Recipe will allow a user to create, read, update and delete recipes whi
 
 My aim is for this app to fix the time-gap between deciding on what to shop for and actually going to the grocery store with a dedicated list. It's created to give back some free time to busy people who like to cook and shop strategically.
 
+## Primary Learning Objectives
+
+Transition from vanilla JS to React, Implementing a CSS Framework (Bootstrap), Many-to-many relationships management, mobile-friendly UI/UX, solving a real-world problem with code
+
 ## How to Set-up & Use
 
 <details>
