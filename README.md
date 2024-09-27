@@ -12,6 +12,28 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
 
 Transition from vanilla JS to React, Implementing a CSS Framework (Bootstrap), Many-to-many relationships management, mobile-friendly UI/UX, solving a real-world problem with code
 
+## Example Walkthrough 
+
+   **Create Recipe**
+
+   ![Create-Recipe GIF](public/assets/Create-Recipe.gif)
+
+   **Update & Delete Recipe**
+
+   ![Edit-Delete-Recipe GIF](public/assets/Edit-Delete-Recipe.gif)
+
+   **Explore, Filter & Favorite Recipes**
+
+   ![Filter-Favorite GIF](public/assets/Filter-Favorite.gif)
+
+   **Roll for Recipe & Shopping List from Favorites**
+
+   ![Roll-Shopping-List GIF](public/assets/Roll-Shopping-List.gif)
+
+   **Update Profile**
+
+   ![Update-Profile GIF](public/assets/Update-Profile.gif)
+
 ## How to Set-up & Use
 
 <details>
