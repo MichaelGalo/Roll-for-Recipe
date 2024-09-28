@@ -1,5 +1,5 @@
 export const getMealCategories = async () => {
-  return await fetch(`http://localhost:8088/mealTypes`).then((res) =>
+  return await fetch(`http://localhost:8000/mealTypes`).then((res) =>
     res.json()
   );
 };

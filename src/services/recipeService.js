@@ -1,23 +1,23 @@
 export const getAllRecipes = async () => {
-  const response = await fetch("http://localhost:8088/recipes");
+  const response = await fetch("http://localhost:8000/recipes");
   const recipes = await response.json();
   return recipes;
 };
 
 export const getRecipesByUserId = async (userId) => {
   return await fetch(
-    `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealType`
+    `http://localhost:8000/recipes?userId=${userId}&_expand=user&_expand=mealType`
   ).then((res) => res.json());
 };
 
 export const getRecipeById = async (id) => {
   return await fetch(
-    `http://localhost:8088/recipes/${id}?_expand=user&_expand=mealType`
+    `http://localhost:8000/recipes/${id}?_expand=user&_expand=mealType`
   ).then((res) => res.json());
 };
 
 export const updateRecipe = async (recipe) => {
-  return await fetch(`http://localhost:8088/recipes/${recipe.id}`, {
+  return await fetch(`http://localhost:8000/recipes/${recipe.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export const updateRecipe = async (recipe) => {
 };
 
 export const addRecipe = async (recipe) => {
-  const response = await fetch("http://localhost:8088/recipes", {
+  const response = await fetch("http://localhost:8000/recipes", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const addIngredients = async (recipeId, ingredients) => {
     }));
 
   const promises = formattedIngredients.map((ingredient) =>
-    fetch(`http://localhost:8088/ingredientsForRecipe`, {
+    fetch(`http://localhost:8000/ingredientsForRecipe`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export const addIngredients = async (recipeId, ingredients) => {
 
 export const getIngredientsForRecipe = async (recipeId) => {
   const response = await fetch(
-    `http://localhost:8088/ingredientsForRecipe?recipeId=${recipeId}&_expand=ingredient`
+    `http://localhost:8000/ingredientsForRecipe?recipeId=${recipeId}&_expand=ingredient`
   );
   return response.json();
 };
@@ -71,14 +71,14 @@ export const getIngredientsForRecipe = async (recipeId) => {
 export const deleteRecipe = async (id) => {
   const ingredients = await getIngredientsForRecipe(id);
   const deletePromises = ingredients.map((ingredient) =>
-    fetch(`http://localhost:8088/ingredientsForRecipe/${ingredient.id}`, {
+    fetch(`http://localhost:8000/ingredientsForRecipe/${ingredient.id}`, {
       method: "DELETE",
     })
   );
   // Wait for all ingredient deletions to complete
   await Promise.all(deletePromises);
 
-  const recipeResponse = await fetch(`http://localhost:8088/recipes/${id}`, {
+  const recipeResponse = await fetch(`http://localhost:8000/recipes/${id}`, {
     method: "DELETE",
   });
 
@@ -88,31 +88,31 @@ export const deleteRecipe = async (id) => {
 //TODO: consider removing due to DRY violation
 export const getRecipeByUserId = async (userId) => {
   return await fetch(
-    `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealTypes`
+    `http://localhost:8000/recipes?userId=${userId}&_expand=user&_expand=mealTypes`
   ).then((res) => res.json());
 };
 
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
   return await fetch(
-    `http://localhost:8088/recipes?userId=${userId}&authorFavorite=true&_expand=user&_expand=mealType`
+    `http://localhost:8000/recipes?userId=${userId}&authorFavorite=true&_expand=user&_expand=mealType`
   ).then((res) => res.json());
 };
 
 export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   return await fetch(
-    `http://localhost:8088/recipeLikes?userId=${userId}&_expand=recipe`
+    `http://localhost:8000/recipeLikes?userId=${userId}&_expand=recipe`
   ).then((res) => res.json());
 };
 
 export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
   return await fetch(
-    `http://localhost:8088/recipeLikes?recipeId=${recipeId}&userId=${userId}`
+    `http://localhost:8000/recipeLikes?recipeId=${recipeId}&userId=${userId}`
   ).then((res) => res.json());
 };
 
 export const likeRecipe = async (recipeId, userId) => {
   // First, create the like
-  const newLike = await fetch(`http://localhost:8088/recipeLikes`, {
+  const newLike = await fetch(`http://localhost:8000/recipeLikes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -134,7 +134,7 @@ export const likeRecipe = async (recipeId, userId) => {
 
 export const unlikeRecipe = async (likeId, recipeId) => {
   // First, delete the like
-  await fetch(`http://localhost:8088/recipeLikes/${likeId}`, {
+  await fetch(`http://localhost:8000/recipeLikes/${likeId}`, {
     method: "DELETE",
   });
   // Then, get the current recipe
