@@ -24,7 +24,7 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
     )
     .map((ingredient) => {
       return fetch(
-        `http://localhost:8000/ingredientsForRecipe/${ingredient.id}`,
+        `http://localhost:8000/ingredient_for_recipe/${ingredient.id}`,
         {
           method: "DELETE",
         }
@@ -43,7 +43,7 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
 
     if (ingredient.id) {
       return fetch(
-        `http://localhost:8000/ingredientsForRecipe/${ingredient.id}`,
+        `http://localhost:8000/ingredients_for_recipe/${ingredient.id}`,
         {
           method: "PUT",
           headers: {
@@ -53,7 +53,7 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
         }
       );
     } else {
-      return fetch(`http://localhost:8000/ingredientsForRecipe`, {
+      return fetch(`http://localhost:8000/ingredient_for_recipe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
 
 export const fetchGrocerySubtypeNames = async (subtypeIds) => {
   const subtypePromises = subtypeIds.map((id) =>
-    fetch(`http://localhost:8000/grocerySubtypes/${id}`).then((response) =>
+    fetch(`http://localhost:8000/grocery_subtypes/${id}`).then((response) =>
       response.json()
     )
   );

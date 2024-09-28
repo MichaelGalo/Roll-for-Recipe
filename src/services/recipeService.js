@@ -4,12 +4,14 @@ export const getAllRecipes = async () => {
   return recipes;
 };
 
+// FIXME: expansion & query untested
 export const getRecipesByUserId = async (userId) => {
   return await fetch(
     `http://localhost:8000/recipes?userId=${userId}&_expand=user&_expand=mealType`
   ).then((res) => res.json());
 };
 
+// FIXME: expansion & query untested
 export const getRecipeById = async (id) => {
   return await fetch(
     `http://localhost:8000/recipes/${id}?_expand=user&_expand=mealType`
@@ -48,7 +50,7 @@ export const addIngredients = async (recipeId, ingredients) => {
     }));
 
   const promises = formattedIngredients.map((ingredient) =>
-    fetch(`http://localhost:8000/ingredientsForRecipe`, {
+    fetch(`http://localhost:8000/ingredient_for_recipe`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,9 +63,10 @@ export const addIngredients = async (recipeId, ingredients) => {
   return Promise.all(responses.map((response) => response.json()));
 };
 
+// FIXME: expansion & query untested
 export const getIngredientsForRecipe = async (recipeId) => {
   const response = await fetch(
-    `http://localhost:8000/ingredientsForRecipe?recipeId=${recipeId}&_expand=ingredient`
+    `http://localhost:8000/ingredient_for_recipe?recipeId=${recipeId}&_expand=ingredient`
   );
   return response.json();
 };
@@ -71,7 +74,7 @@ export const getIngredientsForRecipe = async (recipeId) => {
 export const deleteRecipe = async (id) => {
   const ingredients = await getIngredientsForRecipe(id);
   const deletePromises = ingredients.map((ingredient) =>
-    fetch(`http://localhost:8000/ingredientsForRecipe/${ingredient.id}`, {
+    fetch(`http://localhost:8000/ingredient_for_recipe/${ingredient.id}`, {
       method: "DELETE",
     })
   );
@@ -85,34 +88,37 @@ export const deleteRecipe = async (id) => {
   return recipeResponse.json();
 };
 
-//TODO: consider removing due to DRY violation
+// FIXME: expansion & query untested
 export const getRecipeByUserId = async (userId) => {
   return await fetch(
     `http://localhost:8000/recipes?userId=${userId}&_expand=user&_expand=mealTypes`
   ).then((res) => res.json());
 };
 
+// FIXME: expansion & query untested
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
   return await fetch(
     `http://localhost:8000/recipes?userId=${userId}&authorFavorite=true&_expand=user&_expand=mealType`
   ).then((res) => res.json());
 };
 
+// FIXME: expansion & query untested
 export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   return await fetch(
-    `http://localhost:8000/recipeLikes?userId=${userId}&_expand=recipe`
+    `http://localhost:8000/recipe_likes?userId=${userId}&_expand=recipe`
   ).then((res) => res.json());
 };
 
+// FIXME: expansion & query untested
 export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
   return await fetch(
-    `http://localhost:8000/recipeLikes?recipeId=${recipeId}&userId=${userId}`
+    `http://localhost:8000/recipe_likes?recipeId=${recipeId}&userId=${userId}`
   ).then((res) => res.json());
 };
 
 export const likeRecipe = async (recipeId, userId) => {
   // First, create the like
-  const newLike = await fetch(`http://localhost:8000/recipeLikes`, {
+  const newLike = await fetch(`http://localhost:8000/recipe_likes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -134,7 +140,7 @@ export const likeRecipe = async (recipeId, userId) => {
 
 export const unlikeRecipe = async (likeId, recipeId) => {
   // First, delete the like
-  await fetch(`http://localhost:8000/recipeLikes/${likeId}`, {
+  await fetch(`http://localhost:8000/recipe_likes/${likeId}`, {
     method: "DELETE",
   });
   // Then, get the current recipe
