@@ -1,3 +1,4 @@
+import { fetchWithAuth } from "./fetcher";
 import { getIngredientsForRecipe } from "./recipeService";
 
 export const fetchIngredients = async () => {
