@@ -1,6 +1,4 @@
-import { fetchWithoutAuth } from "./fetcher";
-
-import { fetchWithAuth, fetchWithoutAuth } from './fetchHelpers';
+import { fetchWithAuth, fetchWithoutAuth } from "./fetcher";
 
 export const getUserByEmail = async (email) => {
   return await fetchWithoutAuth(`http://localhost:8000/users/?search=${email}`)

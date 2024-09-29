@@ -1,6 +1,6 @@
 // Centralized fetch functions
 export const fetchWithAuth = (url, options = {}) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("recipe_token");
     return fetch(url, {
       ...options,
       headers: {
