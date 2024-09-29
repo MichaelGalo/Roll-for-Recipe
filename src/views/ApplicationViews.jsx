@@ -27,7 +27,6 @@ export const ApplicationViews = () => {
         setCurrentUser(user);
       } catch (error) {
         console.error("Error parsing user data:", error);
-        // Handle the error, maybe by clearing localStorage and redirecting to login
       }
     }
   }, []);

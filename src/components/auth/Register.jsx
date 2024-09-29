@@ -14,7 +14,7 @@ export const Register = () => {
 
   const handleRegister = async (event) => {
     event.preventDefault();
-
+  
     try {
       const newUser = {
         first_name: firstName,
@@ -23,25 +23,26 @@ export const Register = () => {
         password: password,
         email: email
       };
-
+  
       const response = await createUser(newUser);
-
+  
       if (response.token) {
         localStorage.setItem("recipe_token", response.token);
-        localStorage.setItem("recipe_user", JSON.stringify(response.user));
+        // Store user_id and username separately since there is no 'user' object in response
+        localStorage.setItem("recipe_user", JSON.stringify({
+          id: response.user_id,
+          username: response.username
+        }));
         navigate('/'); // Redirect to home page or dashboard
       } else {
         // Handle registration errors
         console.error("Registration failed:", response);
-        // You might want to set some state here to display error messages
       }
     } catch (error) {
       console.error("An error occurred during registration:", error);
-      // Handle any network or other errors
     }
-
-    navigate("/")
   };
+  
 
   return (
     <form onSubmit={handleRegister}>
