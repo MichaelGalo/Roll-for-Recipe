@@ -23,6 +23,8 @@ export const fetchWithoutAuth = (url, options = {}) => {
   
 
   // Client To-Dos:
-  // TODO: Refactor Register & Login for Django Authorization
-  // TODO: refactor all service calls for Auth Fetches to the correct function. 
-  // TODO: Restyle Login & Register
+  // TODO: refactor all service calls for Auth/NoAuth Fetches to the correct function. 
+  // TODO: Restyle Register
+
+  //API To-Dos:
+  // Using the "Q" function, modify API endpoints to support expanded queries

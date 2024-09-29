@@ -1,26 +1,22 @@
 import { fetchWithoutAuth } from "./fetcher";
 
-export const getUserByEmail = (email) => {
-  return fetch(`http://localhost:8000/users/?search=${email}`).then((res) =>
-    res.json()
-  );
+import { fetchWithAuth, fetchWithoutAuth } from './fetchHelpers';
+
+export const getUserByEmail = async (email) => {
+  return await fetchWithoutAuth(`http://localhost:8000/users/?search=${email}`)
+    .then(res => res.json());
 };
 
 export const getUserById = async (id) => {
-  return await fetch(`http://localhost:8000/users/${id}`).then((res) =>
-    res.json()
-  );
+  return await fetchWithoutAuth(`http://localhost:8000/users/${id}`)
+    .then(res => res.json());
 };
 
-export const updateUser = async (user, token) => {
-  return await fetch(`http://localhost:8000/users/${user.id}/`, {
+export const updateUser = async (user) => {
+  return await fetchWithAuth(`http://localhost:8000/users/${user.id}/`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Token ${token}`
-    },
     body: JSON.stringify(user),
-  }).then((res) => res.json());
+  }).then(res => res.json());
 };
 
 export const loginUser = (username, password) => {
