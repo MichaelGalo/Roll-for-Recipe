@@ -6,7 +6,7 @@ export const getUserByEmail = async (email) => {
 };
 
 export const getUserById = async (id) => {
-  return await fetchWithoutAuth(`http://localhost:8000/users/${id}`)
+  return await fetchWithAuth(`http://localhost:8000/users/${id}`)
     .then(res => res.json());
 };
 
