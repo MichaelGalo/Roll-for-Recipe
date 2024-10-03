@@ -40,13 +40,13 @@ export const addIngredients = async (recipeId, ingredients) => {
   const formattedIngredients = ingredients
     .filter((ingredient) => ingredient.ingredientId && ingredient.quantity)
     .map((ingredient) => ({
-      ingredientId: parseInt(ingredient.ingredientId),
-      recipeId: recipeId,
+      ingredient_id: parseInt(ingredient.ingredientId),
+      recipe_id: recipeId,
       quantity: parseInt(ingredient.quantity, 10) || 0,
     }));
 
   const promises = formattedIngredients.map((ingredient) =>
-    fetchWithAuth(`http://localhost:8000/ingredient_for_recipe`, {
+    fetchWithAuth(`http://localhost:8000/ingredient_for_recipes`, {
       method: "POST",
       body: JSON.stringify(ingredient),
     })
