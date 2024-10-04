@@ -52,14 +52,14 @@ export const RecipeDetails = ({ currentUser }) => {
             <strong>Original Chef:</strong>{" "}
             <Link to={`/profile/${currentRecipe.user?.id}`}>
               {currentRecipe.user
-                ? currentRecipe.user.name
+                ? currentRecipe.user.username
                 : "Loading author..."}
             </Link>
           </p>
           <p>
             <strong>Cuisine:</strong>{" "}
-            {currentRecipe.mealType
-              ? currentRecipe.mealType.name
+            {currentRecipe.meal_type
+              ? currentRecipe.meal_type
               : "Loading cuisine type..."}
           </p>
           <p>
