@@ -19,7 +19,7 @@ export const MyRecipes = ({ currentUser }) => {
       setMyRecipes(sortedRecipes);
     };
     fetchMyPosts();
-  }, [currentUser.id, recipesUpdated]);
+  }, [recipesUpdated]);
 
   const handleRecipeUpdate = () => {
     setRecipesUpdated(!recipesUpdated);
