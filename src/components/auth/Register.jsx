@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { createUser } from '../../services/userService';
 import "./Login.css"
-
 
 export const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -28,76 +27,87 @@ export const Register = () => {
   
       if (response.token) {
         localStorage.setItem("recipe_token", response.token);
-        // Store user_id and username separately since there is no 'user' object in response
         localStorage.setItem("recipe_user", JSON.stringify({
           id: response.user_id,
           username: response.username
         }));
-        navigate('/'); // Redirect to home page or dashboard
+        navigate('/');
       } else {
-        // Handle registration errors
         console.error("Registration failed:", response);
       }
     } catch (error) {
       console.error("An error occurred during registration:", error);
     }
   };
-  
 
   return (
-    <form onSubmit={handleRegister}>
-      <h2>Register</h2>
-      <div>
-        <label htmlFor="firstName">First Name:</label>
-        <input
-          type="text"
-          id="firstName"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="lastName">Last Name:</label>
-        <input
-          type="text"
-          id="lastName"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit">Register</button>
-    </form>
+    <main className="auth-container">
+      <form className="auth-form" onSubmit={handleRegister}>
+        <h1 className="header">Roll for Recipe</h1>
+        <h2>Register New Account</h2>
+        <fieldset className="auth-fieldset">
+          <input
+            type="text"
+            id="firstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="auth-form-input"
+            placeholder="First Name"
+            required
+            autoFocus
+          />
+        </fieldset>
+        <fieldset className="auth-fieldset">
+          <input
+            type="text"
+            id="lastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="auth-form-input"
+            placeholder="Last Name"
+            required
+          />
+        </fieldset>
+        <fieldset className="auth-fieldset">
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="auth-form-input"
+            placeholder="Username"
+            required
+          />
+        </fieldset>
+        <fieldset className="auth-fieldset">
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="auth-form-input"
+            placeholder="Email"
+            required
+          />
+        </fieldset>
+        <fieldset className="auth-fieldset">
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="auth-form-input"
+            placeholder="Password"
+            required
+          />
+        </fieldset>
+        <fieldset className="auth-fieldset">
+          <button type="submit">Register</button>
+        </fieldset>
+      </form>
+      <section className="register-link">
+        <Link to="/login">Already have an account?</Link>
+      </section>
+    </main>
   );
 };

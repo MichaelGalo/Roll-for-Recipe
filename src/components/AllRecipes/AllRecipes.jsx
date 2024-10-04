@@ -11,8 +11,6 @@ export const AllRecipes = ({
 }) => {
   const [authors, setAuthors] = useState({});
 
-  //FIXME: need to get recipe's author id by embedding the user id in the recipe
-
   // must learn to understand this even more. Reduce is so strange, but works perfectly here.
   useEffect(() => {
     const fetchAuthors = async () => {
