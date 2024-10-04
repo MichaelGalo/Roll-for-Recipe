@@ -12,12 +12,12 @@ export const FilterBar = ({
         id="mealCategory-filter"
         className="mealCategory-filter"
         onChange={(event) =>
-          setFilteredCategories(parseInt(event.target.value))
+          setFilteredCategories(event.target.value)
         }
       >
         <option value="0">Filter by Cuisine</option>
         {categories.map((mealCategory) => (
-          <option key={mealCategory.id} value={mealCategory.id}>
+          <option key={mealCategory.id} value={mealCategory.name}>
             {mealCategory.name}
           </option>
         ))}
