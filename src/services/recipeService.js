@@ -64,19 +64,30 @@ export const getIngredientsForRecipe = async (recipeId) => {
 };
 
 export const deleteRecipe = async (id) => {
-  const ingredients = await getIngredientsForRecipe(id);
-  const deletePromises = ingredients.map((ingredient) =>
-    fetchWithAuth(`http://localhost:8000/ingredient_for_recipes/${ingredient.id}`, {
+  try {
+    const ingredients = await getIngredientsForRecipe(id);
+    const deletePromises = ingredients.map((ingredient) =>
+      fetchWithAuth(`http://localhost:8000/ingredient_for_recipes/${ingredient.id}`, {
+        method: "DELETE",
+      })
+    );
+    await Promise.all(deletePromises);
+
+    const recipeResponse = await fetchWithAuth(`http://localhost:8000/recipes/${id}`, {
       method: "DELETE",
-    })
-  );
-  await Promise.all(deletePromises);
+    });
 
-  const recipeResponse = await fetchWithAuth(`http://localhost:8000/recipes/${id}`, {
-    method: "DELETE",
-  });
+    if (!recipeResponse.ok) {
+      const errorData = await recipeResponse.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to delete recipe");
+    }
 
-  return recipeResponse.json();
+    return true;
+
+  } catch (error) {
+    console.error("Error in deleteRecipe:", error);
+    throw error; 
+  }
 };
 
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
