@@ -20,11 +20,3 @@ export const fetchWithoutAuth = (url, options = {}) => {
       }
     });
   };
-  
-
-  // Client To-Dos:
-  // TODO: refactor all service calls for Auth/NoAuth Fetches to the correct function. 
-  // TODO: Restyle Register
-
-  //API To-Dos:
-  // Using the "Q" function, modify API endpoints to support expanded queries

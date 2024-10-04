@@ -11,11 +11,9 @@ export const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login attempted");
 
     try {
       const data = await loginUser(username, password);
-      console.log("Login response:", data);
 
       if (data.token) {
         localStorage.setItem("recipe_token", data.token);
@@ -23,14 +21,11 @@ export const Login = () => {
           id: data.user_id,
           username: data.username
         }));
-        console.log("Token stored, attempting navigation");
         navigate("/");
       } else {
-        console.log("No token in response");
         window.alert("Invalid login credentials");
       }
     } catch (error) {
-      console.error("Login error:", error);
       window.alert("An error occurred during login. Please try again.");
     }
   };

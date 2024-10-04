@@ -6,17 +6,17 @@ export const getAllRecipes = async () => {
   return response.json();
 };
 
-// FIXME: expansion & query untested
+
 export const getRecipesByUserId = async (userId) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipes?userId=${userId}&_expand=user&_expand=mealType`
+    `http://localhost:8000/recipes?userId=${userId}`
   ).then((res) => res.json());
 };
 
-// FIXME: expansion & query untested
+
 export const getRecipeById = async (id) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipes/${id}?_expand=user&_expand=mealType`
+    `http://localhost:8000/recipes/${id}`
   ).then((res) => res.json());
 };
 
@@ -79,28 +79,21 @@ export const deleteRecipe = async (id) => {
   return recipeResponse.json();
 };
 
-// FIXME: expansion & query untested
-export const getRecipeByUserId = async (userId) => {
-  return await fetchWithAuth(
-    `http://localhost:8000/recipes?userId=${userId}&_expand=user&_expand=mealTypes`
-  ).then((res) => res.json());
-};
-
-// FIXME: expansion & query untested
+// FIXME: not returning ONLY the recipes created by author
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipes?userId=${userId}&authorFavorite=true&_expand=user&_expand=mealType`
+    `http://localhost:8000/recipes?userId=${userId}&authorFavorite=true`
   ).then((res) => res.json());
 };
 
-// FIXME: expansion & query untested
+// FIXME: not returning ONLY the likes from a specific user id. Also not expanding the recipe.
 export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   return await fetchWithAuth(
     `http://localhost:8000/recipe_likes?userId=${userId}&_expand=recipe`
   ).then((res) => res.json());
 };
 
-// FIXME: expansion & query untested
+// FIXME: not returning ONLY the data for the specific recipe OR the userId
 export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
   return await fetchWithAuth(
     `http://localhost:8000/recipe_likes?recipeId=${recipeId}&userId=${userId}`
