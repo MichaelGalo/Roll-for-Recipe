@@ -26,7 +26,6 @@ export const EditRecipe = ({ currentUser }) => {
   const [currentRecipe, setCurrentRecipe] = useState({});
   const navigate = useNavigate();
 
-  // Combined fetch of categories, recipe details, and ingredients on component mount
   useEffect(() => {
     const fetchData = async () => {
       const categoriesData = await getMealCategories();
@@ -51,18 +50,22 @@ export const EditRecipe = ({ currentUser }) => {
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
-    newIngredients[index][event.target.name] = event.target.value;
+    newIngredients[index].quantity = event.target.value;
     setIngredients(newIngredients);
   };
 
   const handleIngredientSelect = (index, ingredientId) => {
     const newIngredients = [...ingredients];
-    newIngredients[index].ingredientId = ingredientId;
+    newIngredients[index].ingredient_Id = ingredientId;
+    newIngredients[index].ingredient = { id: ingredientId };
     setIngredients(newIngredients);
   };
 
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, { ingredientId: "", quantity: "" }]);
+    setIngredients([
+      ...ingredients,
+      { ingredient_Id: null, quantity: "", ingredient: { id: null, name: "" } }
+    ]);
   };
 
   const handleRemoveIngredient = (index) => {
@@ -87,10 +90,10 @@ export const EditRecipe = ({ currentUser }) => {
       favorites: authorFavorite
         ? currentRecipe.authorFavorite
           ? favorites
-          : favorites + 1 // If adding favorite
+          : favorites + 1
         : currentRecipe.authorFavorite
         ? favorites - 1
-        : favorites, // If removing favorite
+        : favorites,
       time: time,
       servings: servings,
       date: new Date().toLocaleDateString(),
@@ -127,7 +130,7 @@ export const EditRecipe = ({ currentUser }) => {
         {ingredients.map((ingredient, index) => (
           <InputGroup className="mb-3 add-ingredient-container" key={index}>
             <IngredientDropdown
-              value={ingredient.ingredientId}
+              value={ingredient.ingredient_Id}
               onSelect={(ingredientId) =>
                 handleIngredientSelect(index, ingredientId)
               }

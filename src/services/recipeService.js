@@ -56,10 +56,9 @@ export const addIngredients = async (recipeId, ingredients) => {
   return Promise.all(responses.map((response) => response.json()));
 };
 
-// FIXME: expansion & query untested
 export const getIngredientsForRecipe = async (recipeId) => {
   const response = await fetchWithAuth(
-    `http://localhost:8000/ingredient_for_recipe?recipeId=${recipeId}&_expand=ingredient`
+    `http://localhost:8000/ingredient_for_recipes?recipe_id=${recipeId}&_expand=ingredient`
   );
   return response.json();
 };
@@ -67,7 +66,7 @@ export const getIngredientsForRecipe = async (recipeId) => {
 export const deleteRecipe = async (id) => {
   const ingredients = await getIngredientsForRecipe(id);
   const deletePromises = ingredients.map((ingredient) =>
-    fetchWithAuth(`http://localhost:8000/ingredient_for_recipe/${ingredient.id}`, {
+    fetchWithAuth(`http://localhost:8000/ingredient_for_recipes/${ingredient.id}`, {
       method: "DELETE",
     })
   );
