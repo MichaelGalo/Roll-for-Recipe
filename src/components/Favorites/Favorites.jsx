@@ -13,22 +13,22 @@ export const Favorites = ({ currentUser }) => {
     const fetchFavorites = async () => {
       let totalFavorites = [];
 
-      const authorFavorites = await getFavoriteAuthorMealsByUserId(
-        currentUser.id
-      );
-      const nonAuthorFavorites = await getFavoriteNonAuthorMealsByUserId(
-        currentUser.id
-      );
-      totalFavorites = authorFavorites.concat(nonAuthorFavorites);
-
-      const sortedFavorites = totalFavorites.sort((a, b) =>
-        (a.recipe?.title || a.title).localeCompare(b.recipe?.title || b.title)
-      );
-
-      setFavorites(sortedFavorites);
+      try {
+        const authorFavorites = await getFavoriteAuthorMealsByUserId(currentUser.id);
+        const nonAuthorFavorites = await getFavoriteNonAuthorMealsByUserId(currentUser.id);
+        totalFavorites = authorFavorites.concat(nonAuthorFavorites);
+        const sortedFavorites = totalFavorites.sort((a, b) =>
+          (a.recipe?.title || a.title).localeCompare(b.recipe?.title || b.title)
+        );
+        setFavorites(sortedFavorites);
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+      }
     };
 
-    fetchFavorites();
+    if (currentUser.id) {
+      fetchFavorites();
+    }
   }, [currentUser.id]);
 
   return (

@@ -79,17 +79,15 @@ export const deleteRecipe = async (id) => {
   return recipeResponse.json();
 };
 
-// FIXME: not returning ONLY the recipes created by author
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipes?userId=${userId}&authorFavorite=true`
+    `http://localhost:8000/recipes/favorites?userId=${userId}&authorFavorite=true`
   ).then((res) => res.json());
 };
 
-// FIXME: not returning ONLY the likes from a specific user id. Also not expanding the recipe.
 export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipe_likes?userId=${userId}&_expand=recipe`
+    `http://localhost:8000/recipes/favorites?userId=${userId}`
   ).then((res) => res.json());
 };
 
@@ -103,7 +101,7 @@ export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
 export const likeRecipe = async (recipeId, userId) => {
   const newLike = await fetchWithAuth(`http://localhost:8000/recipe_likes`, {
     method: "POST",
-    body: JSON.stringify({ recipeId, userId }),
+    body: JSON.stringify({ recipe_Id: recipeId, user_Id: userId }),
   }).then((res) => res.json());
 
   const recipe = await getRecipeById(recipeId);
