@@ -102,13 +102,6 @@ export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   ).then((res) => res.json());
 };
 
-// FIXME: not returning ONLY the data for the specific recipe OR the userId
-export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
-  return await fetchWithAuth(
-    `http://localhost:8000/recipe_likes?recipeId=${recipeId}&userId=${userId}`
-  ).then((res) => res.json());
-};
-
 export const likeRecipe = async (recipeId, userId) => {
   const newLike = await fetchWithAuth(`http://localhost:8000/recipe_likes`, {
     method: "POST",
@@ -125,17 +118,31 @@ export const likeRecipe = async (recipeId, userId) => {
   return newLike;
 };
 
-export const unlikeRecipe = async (likeId, recipeId) => {
-  await fetchWithAuth(`http://localhost:8000/recipe_likes/${likeId}`, {
-    method: "DELETE",
-  });
 
-  const recipe = await getRecipeById(recipeId);
-  const updatedRecipe = {
-    ...recipe,
-    favorites: Math.max((recipe.favorites || 0) - 1, 0),
+export const unlikeRecipe = async (likeId) => {
+  try {
+    const deleteResponse = await fetchWithAuth(`http://localhost:8000/recipe_likes/${likeId}`, {
+      method: "DELETE",
+    });
+
+    if (!deleteResponse.ok) {
+      const errorData = await deleteResponse.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to unlike recipe");
+    }
+
+    return true; // Successful unlike
+
+  } catch (error) {
+    console.error("Error in unlikeRecipe:", error);
+    throw error; // Re-throw the error so it can be handled by the calling function
+  }
+};
+
+export const checkRecipeLike = async (recipeId, userId) => {
+  const response = await fetchWithAuth(`http://localhost:8000/recipe_likes/check_like?recipe_id=${recipeId}&user_id=${userId}`);
+  const data = await response.json();
+  return {
+    isLiked: data.is_liked,
+    likeId: data.like_id  // Assuming the backend returns this
   };
-  const result = await updateRecipe(updatedRecipe);
-
-  return updatedRecipe;
 };
