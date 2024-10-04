@@ -15,7 +15,7 @@ export const FilterBar = ({
           setFilteredCategories(event.target.value)
         }
       >
-        <option value="0">Filter by Cuisine</option>
+        <option value="">Filter by Cuisine</option>
         {categories.map((mealCategory) => (
           <option key={mealCategory.id} value={mealCategory.name}>
             {mealCategory.name}
