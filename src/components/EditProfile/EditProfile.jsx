@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 export const EditProfile = ({ currentUser }) => {
   const [userData, setUserData] = useState({
     id: "",
-    name: "",
+    username: "",
     email: "",
+    first_name: "",
+    last_name: "",
   });
 
   const navigate = useNavigate();
@@ -19,8 +21,10 @@ export const EditProfile = ({ currentUser }) => {
         const response = await getUserById(currentUser.id);
         setUserData({
           id: response.id,
-          name: response.name || "",
+          username: response.username || "",
           email: response.email || "",
+          first_name: response.first_name || "",
+          last_name: response.last_name || "",
         });
         localStorage.setItem("user", JSON.stringify(response));
       }
@@ -41,8 +45,10 @@ export const EditProfile = ({ currentUser }) => {
     const updatedUser = await getUserById(currentUser.id);
     setUserData({
       id: updatedUser.id,
-      name: updatedUser.name || "",
+      username: updatedUser.username || "",
       email: updatedUser.email || "",
+      first_name: updatedUser.first_name || "",
+      last_name: updatedUser.last_name || "",
     });
     localStorage.setItem("user", JSON.stringify(updatedUser));
     navigate(`/profile/${currentUser.id}`);
@@ -58,13 +64,13 @@ export const EditProfile = ({ currentUser }) => {
             </Card.Header>
             <Card.Body>
               <Form>
-                <Form.Group controlId="formName">
-                  <Form.Label>Name</Form.Label>
+                <Form.Group controlId="formUsername">
+                  <Form.Label>Username</Form.Label>
                   <Form.Control
                     type="text"
-                    name="name"
-                    placeholder="Enter name"
-                    value={userData.name}
+                    name="username"
+                    placeholder="Enter username"
+                    value={userData.username}
                     onChange={handleInputChange}
                   />
                 </Form.Group>
@@ -75,6 +81,26 @@ export const EditProfile = ({ currentUser }) => {
                     name="email"
                     placeholder="Enter email"
                     value={userData.email}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formFirstName" className="mt-3">
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="first_name"
+                    placeholder="Enter first name"
+                    value={userData.first_name}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formLastName" className="mt-3">
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="last_name"
+                    placeholder="Enter last name"
+                    value={userData.last_name}
                     onChange={handleInputChange}
                   />
                 </Form.Group>

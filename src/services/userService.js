@@ -11,7 +11,7 @@ export const getUserById = async (id) => {
 };
 
 export const updateUser = async (user) => {
-  return await fetchWithAuth(`http://localhost:8000/users/${user.id}/`, {
+  return await fetchWithAuth(`http://localhost:8000/users/${user.id}`, {
     method: "PUT",
     body: JSON.stringify(user),
   }).then(res => res.json());
