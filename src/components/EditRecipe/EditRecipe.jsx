@@ -15,7 +15,8 @@ import { updateIngredientsForRecipe } from "../../services/ingredientsService";
 export const EditRecipe = ({ currentUser }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [mealTypeId, setMealTypeId] = useState(0);
+  // const [mealTypeId, setMealTypeId] = useState(0);
+  const [mealType, setMealType] = useState("");
   const [categories, setCategories] = useState([]);
   const [authorFavorite, setAuthorFavorite] = useState(false);
   const [favorites, setFavorites] = useState(0);
@@ -35,7 +36,8 @@ export const EditRecipe = ({ currentUser }) => {
       setCurrentRecipe(recipe);
       setTitle(recipe.title);
       setBody(recipe.body);
-      setMealTypeId(recipe.mealTypeId);
+      // setMealTypeId(recipe.mealTypeId);
+      setMealType(recipe.meal_type);
       setTime(recipe.time);
       setServings(recipe.servings);
       setAuthorFavorite(recipe.authorFavorite);
@@ -75,29 +77,32 @@ export const EditRecipe = ({ currentUser }) => {
   };
 
   const handleSave = async () => {
-    const formattedBody = body
-      .split("\n")
-      .map((line) => line.trim())
-      .join("\n");
+  const formattedBody = body
+    .split("\n")
+    .map((line) => line.trim())
+    .join("\n");
 
-    const newRecipe = {
-      id: recipeId,
-      title: title,
-      body: formattedBody,
-      mealTypeId: parseInt(mealTypeId),
-      userId: currentUser.id,
-      authorFavorite: authorFavorite,
-      favorites: authorFavorite
-        ? currentRecipe.authorFavorite
-          ? favorites
-          : favorites + 1
-        : currentRecipe.authorFavorite
-        ? favorites - 1
-        : favorites,
-      time: time,
-      servings: servings,
-      date: new Date().toLocaleDateString(),
-    };
+  const mealTypeId = categories.find(category => category.name === mealType)?.id;
+
+  const newRecipe = {
+    id: recipeId,
+    title: title,
+    body: formattedBody,
+    // mealTypeId: parseInt(mealTypeId),
+    mealTypeId: mealTypeId,
+    userId: currentUser.id,
+    authorFavorite: authorFavorite,
+    favorites: authorFavorite
+      ? currentRecipe.author_favorite
+        ? favorites
+        : favorites + 1
+      : currentRecipe.author_favorite
+      ? favorites - 1
+      : favorites,
+    time: time,
+    servings: servings,
+    date: new Date().toISOString().split('T')[0],
+  };
 
     const updatedRecipe = await updateRecipe(newRecipe);
     await updateIngredientsForRecipe(recipeId, ingredients);
@@ -171,12 +176,12 @@ export const EditRecipe = ({ currentUser }) => {
       <Form.Group className="mb-3">
         <Form.Label>Cuisine</Form.Label>
         <Form.Select
-          value={mealTypeId}
-          onChange={(e) => setMealTypeId(e.target.value)}
+          value={mealType}
+          onChange={(e) => setMealType(e.target.value)}
         >
           <option value="">Select a Cuisine</option>
           {categories.map((category) => (
-            <option key={category.id} value={category.id}>
+            <option key={category.id} value={category.name}>
               {category.name}
             </option>
           ))}
