@@ -106,17 +106,17 @@ export const RecipeDetails = ({ currentUser }) => {
         </Col>
       </Row>
       <Row className="button-container">
-        {currentUser.id !== currentRecipe.userId && (
+        {currentUser.id !== currentRecipe.user?.id && (
           <LikeButton currentRecipe={currentRecipe} currentUser={currentUser} />
         )}{" "}
-        {currentUser.id === currentRecipe.userId && (
+        {currentUser.id === currentRecipe.user?.id && (
           <EditButton
             currentUser={currentUser}
             currentRecipe={currentRecipe}
             handleRecipeUpdate={handleRecipeUpdate}
           />
         )}
-        {currentUser.id === currentRecipe.userId && (
+        {currentUser.id === currentRecipe.user?.id && (
           <DeleteButton
             currentUser={currentUser}
             currentRecipe={currentRecipe}
