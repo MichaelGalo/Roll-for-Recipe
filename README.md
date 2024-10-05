@@ -66,22 +66,32 @@ Transition from vanilla JS to React, Implementing a CSS Framework (Bootstrap), M
 </details>
 
 <details>
-  <summary>Set Up Instructions for Json-Server Database</summary>
+  <summary>Set Up Instructions for the Django/SQLite API</summary>
 
-1. Clone this repository:
-    ```bash
-    git clone git@github.com:MichaelGalo/Roll-For-Recipe-API.git
-    ```
+1. Clone the repository:
 
-2. Navigate into the project directory:
-    ```bash
-    cd your-repo
-    ```
+   ```bash
+   git clone https://github.com/MichaelGalo/recipe-api.git
+   cd roll-for-recipe
 
-3. Run Json-Server:
-    ```bash
-    json-server database.json -p 8088 --watch
-    ```
+2. Create the viritual environment: 
+
+    ```python
+    pipenv shell
+
+3. Install dependencies: 
+
+    ```python
+    pipenv install
+
+4. Apply migrations:
+
+    ```python
+    python manage.py migrate
+
+5. Run the development server:
+    ```python
+    python manage.py runserver
 
 </details>
 
