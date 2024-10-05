@@ -19,7 +19,7 @@ export const MyRecipes = ({ currentUser }) => {
       setMyRecipes(sortedRecipes);
     };
     fetchMyPosts();
-  }, [currentUser.id, recipesUpdated]);
+  }, [currentUser, recipesUpdated]);
 
   const handleRecipeUpdate = () => {
     setRecipesUpdated(!recipesUpdated);
@@ -42,8 +42,8 @@ export const MyRecipes = ({ currentUser }) => {
                     {recipe.title}
                   </Link>
                 </Card.Title>
-                <Card.Text>Cuisine: {recipe.mealType?.name}</Card.Text>
-                <Card.Text>Author: {recipe.user.name}</Card.Text>
+                <Card.Text>Cuisine: {recipe.meal_type}</Card.Text>
+                <Card.Text>Author: {recipe.user.username}</Card.Text>
                 <Card.Text>Number of Favorites: {recipe.favorites}</Card.Text>
                 <Card.Text>Created: {recipe.date}</Card.Text>
                 <DeleteButton

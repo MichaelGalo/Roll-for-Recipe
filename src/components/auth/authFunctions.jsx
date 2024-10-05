@@ -11,6 +11,6 @@ export const getUserInfo = () => {
 export const handleLogout = () => {
   const navigate = useNavigate();
   localStorage.removeItem("recipe_token");
-  localStorage.removeItem("user");
+  localStorage.removeItem("recipe_user");
   navigate("/login", { replace: true });
 };

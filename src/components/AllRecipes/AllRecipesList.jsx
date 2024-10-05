@@ -13,7 +13,7 @@ export const AllRecipesList = ({ currentUser }) => {
   const [recipes, setRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
-  const [filteredCategories, setFilteredCategories] = useState(0);
+  const [filteredCategories, setFilteredCategories] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [prepTime, setPrepTime] = useState(null);
 
@@ -58,9 +58,9 @@ export const AllRecipesList = ({ currentUser }) => {
   useEffect(() => {
     let updatedRecipes = [...recipes];
 
-    if (filteredCategories !== 0) {
+    if (filteredCategories !== "") {
       updatedRecipes = updatedRecipes.filter(
-        (recipe) => recipe.mealTypeId === filteredCategories
+        (recipe) => recipe.meal_type.toLowerCase() === filteredCategories.toLowerCase()
       );
     }
 

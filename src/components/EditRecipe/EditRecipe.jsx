@@ -15,7 +15,7 @@ import { updateIngredientsForRecipe } from "../../services/ingredientsService";
 export const EditRecipe = ({ currentUser }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [mealTypeId, setMealTypeId] = useState(0);
+  const [mealType, setMealType] = useState("");
   const [categories, setCategories] = useState([]);
   const [authorFavorite, setAuthorFavorite] = useState(false);
   const [favorites, setFavorites] = useState(0);
@@ -24,9 +24,9 @@ export const EditRecipe = ({ currentUser }) => {
   const [ingredients, setIngredients] = useState([]);
   const { recipeId } = useParams();
   const [currentRecipe, setCurrentRecipe] = useState({});
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Combined fetch of categories, recipe details, and ingredients on component mount
   useEffect(() => {
     const fetchData = async () => {
       const categoriesData = await getMealCategories();
@@ -36,10 +36,10 @@ export const EditRecipe = ({ currentUser }) => {
       setCurrentRecipe(recipe);
       setTitle(recipe.title);
       setBody(recipe.body);
-      setMealTypeId(recipe.mealTypeId);
+      setMealType(recipe.meal_type);
       setTime(recipe.time);
       setServings(recipe.servings);
-      setAuthorFavorite(recipe.authorFavorite);
+      setAuthorFavorite(recipe.author_favorite);
       setFavorites(recipe.favorites);
 
       const ingredientsData = await getIngredientsForRecipe(recipeId);
@@ -51,18 +51,22 @@ export const EditRecipe = ({ currentUser }) => {
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
-    newIngredients[index][event.target.name] = event.target.value;
+    newIngredients[index].quantity = event.target.value;
     setIngredients(newIngredients);
   };
 
   const handleIngredientSelect = (index, ingredientId) => {
     const newIngredients = [...ingredients];
-    newIngredients[index].ingredientId = ingredientId;
+    newIngredients[index].ingredient_Id = ingredientId;
+    newIngredients[index].ingredient = { id: ingredientId };
     setIngredients(newIngredients);
   };
 
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, { ingredientId: "", quantity: "" }]);
+    setIngredients([
+      ...ingredients,
+      { ingredient_Id: null, quantity: "", ingredient: { id: null, name: "" } }
+    ]);
   };
 
   const handleRemoveIngredient = (index) => {
@@ -72,36 +76,56 @@ export const EditRecipe = ({ currentUser }) => {
   };
 
   const handleSave = async () => {
+  try {
+    setError(null);
     const formattedBody = body
       .split("\n")
       .map((line) => line.trim())
       .join("\n");
 
+    const mealTypeId = categories.find(category => category.name === mealType)?.id;
+
     const newRecipe = {
       id: recipeId,
       title: title,
       body: formattedBody,
-      mealTypeId: parseInt(mealTypeId),
+      mealTypeId: mealTypeId,
       userId: currentUser.id,
       authorFavorite: authorFavorite,
       favorites: authorFavorite
-        ? currentRecipe.authorFavorite
+        ? currentRecipe.author_favorite
           ? favorites
-          : favorites + 1 // If adding favorite
-        : currentRecipe.authorFavorite
+          : favorites + 1
+        : currentRecipe.author_favorite
         ? favorites - 1
-        : favorites, // If removing favorite
+        : favorites,
       time: time,
       servings: servings,
-      date: new Date().toLocaleDateString(),
+      date: new Date().toISOString().split('T')[0],
     };
 
     const updatedRecipe = await updateRecipe(newRecipe);
-    await updateIngredientsForRecipe(recipeId, ingredients);
+
+    const ingredientsToUpdate = ingredients.filter(
+      ingredient => ingredient.ingredient_Id && ingredient.quantity
+    ).map(ingredient => ({
+      id: ingredient.id,
+      ingredient_Id: ingredient.ingredient_Id,
+      quantity: ingredient.quantity,
+    }));
+
+    const updatedIngredientsResponse = await updateIngredientsForRecipe(recipeId, ingredientsToUpdate);
+
+    // Fetch updated ingredients
     const updatedIngredients = await getIngredientsForRecipe(recipeId);
     setIngredients(updatedIngredients);
 
     navigate("/recipe-details/" + recipeId);
+  } catch (error) {
+    console.error("Error updating recipe:", error);
+    setError("Failed to update recipe. Please check the console for more details.");
+    // Don't navigate away if there's an error
+  }
   };
 
   return (
@@ -127,7 +151,7 @@ export const EditRecipe = ({ currentUser }) => {
         {ingredients.map((ingredient, index) => (
           <InputGroup className="mb-3 add-ingredient-container" key={index}>
             <IngredientDropdown
-              value={ingredient.ingredientId}
+              value={ingredient.ingredient_Id}
               onSelect={(ingredientId) =>
                 handleIngredientSelect(index, ingredientId)
               }
@@ -168,12 +192,12 @@ export const EditRecipe = ({ currentUser }) => {
       <Form.Group className="mb-3">
         <Form.Label>Cuisine</Form.Label>
         <Form.Select
-          value={mealTypeId}
-          onChange={(e) => setMealTypeId(e.target.value)}
+          value={mealType}
+          onChange={(e) => setMealType(e.target.value)}
         >
           <option value="">Select a Cuisine</option>
           {categories.map((category) => (
-            <option key={category.id} value={category.id}>
+            <option key={category.id} value={category.name}>
               {category.name}
             </option>
           ))}

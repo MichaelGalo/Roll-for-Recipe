@@ -43,8 +43,9 @@ export const Profile = ({ currentUser }) => {
             <Card.Body>
               {user ? (
                 <>
-                  <Card.Title>{user.name}</Card.Title>
-                  <Card.Text>{user.email}</Card.Text>
+                  <Card.Title>{user.first_name} {user.last_name}</Card.Title>
+                  <Card.Text><strong>Email:</strong> {user.email}</Card.Text>
+                  <Card.Text><strong>Username:</strong> {user.username}</Card.Text>
                 </>
               ) : (
                 <p>Loading...</p>

@@ -1,20 +1,18 @@
+import { fetchWithAuth } from "./fetcher";
 import { getIngredientsForRecipe } from "./recipeService";
 
 export const fetchIngredients = async () => {
-  const response = await fetch("http://localhost:8088/ingredients");
+  const response = await fetchWithAuth("http://localhost:8000/ingredients");
   return response.json();
 };
 
 export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
-  // Filter out placeholder ingredients
   const validIngredients = ingredients.filter(
-    (ingredient) => ingredient.ingredientId && ingredient.quantity
+    (ingredient) => ingredient.ingredient_Id && ingredient.quantity
   );
 
-  // Fetch existing ingredients for the recipe
   const existingIngredients = await getIngredientsForRecipe(recipeId);
 
-  // Delete existing ingredients that are not in the updated list
   const deletePromises = existingIngredients
     .filter(
       (existingIngredient) =>
@@ -23,27 +21,29 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
         )
     )
     .map((ingredient) => {
-      return fetch(
-        `http://localhost:8088/ingredientsForRecipe/${ingredient.id}`,
+      return fetchWithAuth(
+        `http://localhost:8000/ingredient_for_recipes/${ingredient.id}`,
         {
           method: "DELETE",
         }
-      );
+      ).catch(error => {
+        console.error(`Failed to delete ingredient ${ingredient.id}:`, error);
+        return null;
+      });
     });
 
   await Promise.all(deletePromises);
 
-  // Update or add ingredients
   const updatePromises = validIngredients.map((ingredient) => {
     const body = JSON.stringify({
-      ingredientId: parseInt(ingredient.ingredientId, 10),
-      recipeId: recipeId,
-      quantity: parseInt(ingredient.quantity, 10) || 0,
+      ingredient_id: parseInt(ingredient.ingredient_Id, 10),
+      recipe_id: parseInt(recipeId, 10),
+      quantity: parseInt(ingredient.quantity, 10),
     });
 
     if (ingredient.id) {
-      return fetch(
-        `http://localhost:8088/ingredientsForRecipe/${ingredient.id}`,
+      return fetchWithAuth(
+        `http://localhost:8000/ingredient_for_recipes/${ingredient.id}`,
         {
           method: "PUT",
           headers: {
@@ -51,25 +51,44 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
           },
           body: body,
         }
-      );
+      ).then(response => {
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(`Failed to update ingredient ${ingredient.id}: ${response.status} ${response.statusText}\n${text}`);
+          });
+        }
+        return { status: 'updated', id: ingredient.id };
+      });
     } else {
-      return fetch(`http://localhost:8088/ingredientsForRecipe`, {
+      return fetchWithAuth(`http://localhost:8000/ingredient_for_recipes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: body,
+      }).then(response => {
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(`Failed to create ingredient: ${response.status} ${response.statusText}\n${text}`);
+          });
+        }
+        return response.json();
       });
     }
   });
 
-  const responses = await Promise.all(updatePromises);
-  return Promise.all(responses.map((response) => response.json()));
+  try {
+    const responses = await Promise.all(updatePromises);
+    return responses;
+  } catch (error) {
+    console.error("Error updating ingredients:", error);
+    throw error;
+  }
 };
 
 export const fetchGrocerySubtypeNames = async (subtypeIds) => {
   const subtypePromises = subtypeIds.map((id) =>
-    fetch(`http://localhost:8088/grocerySubtypes/${id}`).then((response) =>
+    fetchWithAuth(`http://localhost:8000/grocery_subtypes/${id}`).then((response) =>
       response.json()
     )
   );

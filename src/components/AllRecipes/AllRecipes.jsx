@@ -7,7 +7,6 @@ import { getUserById } from "../../services/userService";
 export const AllRecipes = ({
   recipes,
   categories,
-  getMealCategoryName,
   currentUser,
 }) => {
   const [authors, setAuthors] = useState({});
@@ -15,14 +14,14 @@ export const AllRecipes = ({
   // must learn to understand this even more. Reduce is so strange, but works perfectly here.
   useEffect(() => {
     const fetchAuthors = async () => {
-      const authorIds = recipes.map((recipe) => recipe.userId);
+      const authorIds = recipes.map((recipe) => recipe.user.id);
       const uniqueAuthorIds = [...new Set(authorIds)]; // Remove duplicates
       const authorDetailsPromises = uniqueAuthorIds.map((id) =>
         getUserById(id)
       );
       const authorDetails = await Promise.all(authorDetailsPromises);
       const authorMap = authorDetails.reduce((acc, author) => {
-        acc[author.id] = author.name;
+        acc[author.id] = author.username;
         return acc;
       }, {});
       setAuthors(authorMap);
@@ -50,13 +49,13 @@ export const AllRecipes = ({
             <p>
               Cuisine:{" "}
               <span style={{ fontWeight: "bold" }}>
-                {getMealCategoryName(recipe.mealTypeId)}
+                {recipe.meal_type}
               </span>
             </p>
             <p>
               Author:{" "}
               <span style={{ fontStyle: "italic" }}>
-                {authors[recipe.userId] || "Loading..."}
+                {authors[recipe.user.id] || "Loading..."}
               </span>
             </p>
           </li>

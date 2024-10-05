@@ -18,8 +18,17 @@ export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
-    const localRecipeUser = localStorage.getItem("recipe_token");
-    setCurrentUser(JSON.parse(localRecipeUser));
+    const token = localStorage.getItem("recipe_token");
+    const userString = localStorage.getItem("recipe_user");
+    
+    if (token && userString) {
+      try {
+        const user = JSON.parse(userString);
+        setCurrentUser(user);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
   }, []);
 
   return (

@@ -1,31 +1,33 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
-import { getUserByEmail } from "../../services/userService";
+import { loginUser } from "../../services/userService";
+
 
 export const Login = () => {
-  const [email, set] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    return getUserByEmail(email).then((foundUsers) => {
-      if (foundUsers.length === 1) {
-        const user = foundUsers[0];
-        localStorage.setItem(
-          "recipe_token",
-          JSON.stringify({
-            id: user.id,
-          })
-        );
+    try {
+      const data = await loginUser(username, password);
 
+      if (data.token) {
+        localStorage.setItem("recipe_token", data.token);
+        localStorage.setItem("recipe_user", JSON.stringify({
+          id: data.user_id,
+          username: data.username
+        }));
         navigate("/");
       } else {
-        window.alert("Invalid login");
+        window.alert("Invalid login credentials");
       }
-    });
+    } catch (error) {
+      window.alert("An error occurred during login. Please try again.");
+    }
   };
 
   return (
@@ -37,13 +39,25 @@ export const Login = () => {
           <fieldset className="auth-fieldset">
             <div>
               <input
-                type="email"
-                value={email}
+                type="text"
+                value={username}
                 className="auth-form-input"
-                onChange={(evt) => set(evt.target.value)}
-                placeholder="Email address"
+                onChange={(evt) => setUsername(evt.target.value)}
+                placeholder="Username"
                 required
                 autoFocus
+              />
+            </div>
+          </fieldset>
+          <fieldset className="auth-fieldset">
+            <div>
+              <input
+                type="password"
+                value={password}
+                className="auth-form-input"
+                onChange={(evt) => setPassword(evt.target.value)}
+                placeholder="Password"
+                required
               />
             </div>
           </fieldset>

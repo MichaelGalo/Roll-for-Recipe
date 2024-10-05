@@ -52,14 +52,14 @@ export const RecipeDetails = ({ currentUser }) => {
             <strong>Original Chef:</strong>{" "}
             <Link to={`/profile/${currentRecipe.user?.id}`}>
               {currentRecipe.user
-                ? currentRecipe.user.name
+                ? currentRecipe.user.username
                 : "Loading author..."}
             </Link>
           </p>
           <p>
             <strong>Cuisine:</strong>{" "}
-            {currentRecipe.mealType
-              ? currentRecipe.mealType.name
+            {currentRecipe.meal_type
+              ? currentRecipe.meal_type
               : "Loading cuisine type..."}
           </p>
           <p>
@@ -68,7 +68,7 @@ export const RecipeDetails = ({ currentUser }) => {
               ? currentRecipe.time
               : "No set prep time for this recipe"}
           </p>
-          {/* TODO: Add favorites after implementing favorites state
+          {/* Add favorites after implementing favorites state
           {currentRecipe.favorites !== undefined && (
             <p>
               <strong>How many others have favorited this meal:</strong>{" "}
@@ -106,17 +106,17 @@ export const RecipeDetails = ({ currentUser }) => {
         </Col>
       </Row>
       <Row className="button-container">
-        {currentUser.id !== currentRecipe.userId && (
+        {currentUser.id !== currentRecipe.user?.id && (
           <LikeButton currentRecipe={currentRecipe} currentUser={currentUser} />
         )}{" "}
-        {currentUser.id === currentRecipe.userId && (
+        {currentUser.id === currentRecipe.user?.id && (
           <EditButton
             currentUser={currentUser}
             currentRecipe={currentRecipe}
             handleRecipeUpdate={handleRecipeUpdate}
           />
         )}
-        {currentUser.id === currentRecipe.userId && (
+        {currentUser.id === currentRecipe.user?.id && (
           <DeleteButton
             currentUser={currentUser}
             currentRecipe={currentRecipe}

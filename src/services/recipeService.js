@@ -1,37 +1,35 @@
+import { fetchWithAuth } from "./fetcher";
+
+
 export const getAllRecipes = async () => {
-  const response = await fetch("http://localhost:8088/recipes");
-  const recipes = await response.json();
-  return recipes;
+  const response = await fetchWithAuth("http://localhost:8000/recipes");
+  return response.json();
 };
 
+
 export const getRecipesByUserId = async (userId) => {
-  return await fetch(
-    `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealType`
+  return await fetchWithAuth(
+    `http://localhost:8000/recipes?userId=${userId}`
   ).then((res) => res.json());
 };
 
+
 export const getRecipeById = async (id) => {
-  return await fetch(
-    `http://localhost:8088/recipes/${id}?_expand=user&_expand=mealType`
+  return await fetchWithAuth(
+    `http://localhost:8000/recipes/${id}`
   ).then((res) => res.json());
 };
 
 export const updateRecipe = async (recipe) => {
-  return await fetch(`http://localhost:8088/recipes/${recipe.id}`, {
+  return await fetchWithAuth(`http://localhost:8000/recipes/${recipe.id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(recipe),
   }).then((res) => res.json());
 };
 
 export const addRecipe = async (recipe) => {
-  const response = await fetch("http://localhost:8088/recipes", {
+  const response = await fetchWithAuth("http://localhost:8000/recipes", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(recipe),
   });
   const data = await response.json();
@@ -42,17 +40,14 @@ export const addIngredients = async (recipeId, ingredients) => {
   const formattedIngredients = ingredients
     .filter((ingredient) => ingredient.ingredientId && ingredient.quantity)
     .map((ingredient) => ({
-      ingredientId: parseInt(ingredient.ingredientId),
-      recipeId: recipeId,
+      ingredient_id: parseInt(ingredient.ingredientId),
+      recipe_id: recipeId,
       quantity: parseInt(ingredient.quantity, 10) || 0,
     }));
 
   const promises = formattedIngredients.map((ingredient) =>
-    fetch(`http://localhost:8088/ingredientsForRecipe`, {
+    fetchWithAuth(`http://localhost:8000/ingredient_for_recipes`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(ingredient),
     })
   );
@@ -62,90 +57,92 @@ export const addIngredients = async (recipeId, ingredients) => {
 };
 
 export const getIngredientsForRecipe = async (recipeId) => {
-  const response = await fetch(
-    `http://localhost:8088/ingredientsForRecipe?recipeId=${recipeId}&_expand=ingredient`
+  const response = await fetchWithAuth(
+    `http://localhost:8000/ingredient_for_recipes?recipe_id=${recipeId}&_expand=ingredient`
   );
   return response.json();
 };
 
 export const deleteRecipe = async (id) => {
-  const ingredients = await getIngredientsForRecipe(id);
-  const deletePromises = ingredients.map((ingredient) =>
-    fetch(`http://localhost:8088/ingredientsForRecipe/${ingredient.id}`, {
+  try {
+    const ingredients = await getIngredientsForRecipe(id);
+    const deletePromises = ingredients.map((ingredient) =>
+      fetchWithAuth(`http://localhost:8000/ingredient_for_recipes/${ingredient.id}`, {
+        method: "DELETE",
+      })
+    );
+    await Promise.all(deletePromises);
+
+    const recipeResponse = await fetchWithAuth(`http://localhost:8000/recipes/${id}`, {
       method: "DELETE",
-    })
-  );
-  // Wait for all ingredient deletions to complete
-  await Promise.all(deletePromises);
+    });
 
-  const recipeResponse = await fetch(`http://localhost:8088/recipes/${id}`, {
-    method: "DELETE",
-  });
+    if (!recipeResponse.ok) {
+      const errorData = await recipeResponse.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to delete recipe");
+    }
 
-  return recipeResponse.json();
-};
+    return true;
 
-//TODO: consider removing due to DRY violation
-export const getRecipeByUserId = async (userId) => {
-  return await fetch(
-    `http://localhost:8088/recipes?userId=${userId}&_expand=user&_expand=mealTypes`
-  ).then((res) => res.json());
+  } catch (error) {
+    console.error("Error in deleteRecipe:", error);
+    throw error; 
+  }
 };
 
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
-  return await fetch(
-    `http://localhost:8088/recipes?userId=${userId}&authorFavorite=true&_expand=user&_expand=mealType`
+  return await fetchWithAuth(
+    `http://localhost:8000/recipes/favorites?userId=${userId}&authorFavorite=true`
   ).then((res) => res.json());
 };
 
 export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
-  return await fetch(
-    `http://localhost:8088/recipeLikes?userId=${userId}&_expand=recipe`
-  ).then((res) => res.json());
-};
-
-export const getRecipeLikesByRecipeIdAndUserId = async (recipeId, userId) => {
-  return await fetch(
-    `http://localhost:8088/recipeLikes?recipeId=${recipeId}&userId=${userId}`
+  return await fetchWithAuth(
+    `http://localhost:8000/recipes/favorites?userId=${userId}`
   ).then((res) => res.json());
 };
 
 export const likeRecipe = async (recipeId, userId) => {
-  // First, create the like
-  const newLike = await fetch(`http://localhost:8088/recipeLikes`, {
+  const newLike = await fetchWithAuth(`http://localhost:8000/recipe_likes`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ recipeId, userId }),
+    body: JSON.stringify({ recipe_Id: recipeId, user_Id: userId }),
   }).then((res) => res.json());
-  // Then, get the current recipe
+
   const recipe = await getRecipeById(recipeId);
-  // Update the recipe's favorites count
   const updatedRecipe = {
     ...recipe,
     favorites: (recipe.favorites || 0) + 1,
   };
-  // Save the updated recipe
   await updateRecipe(updatedRecipe);
 
   return newLike;
 };
 
-export const unlikeRecipe = async (likeId, recipeId) => {
-  // First, delete the like
-  await fetch(`http://localhost:8088/recipeLikes/${likeId}`, {
-    method: "DELETE",
-  });
-  // Then, get the current recipe
-  const recipe = await getRecipeById(recipeId);
-  // Update the recipe's favorites count
-  const updatedRecipe = {
-    ...recipe,
-    favorites: Math.max((recipe.favorites || 0) - 1, 0), // Ensure it doesn't go below 0
-  };
-  // Save the updated recipe
-  const result = await updateRecipe(updatedRecipe);
 
-  return updatedRecipe;
+export const unlikeRecipe = async (likeId) => {
+  try {
+    const deleteResponse = await fetchWithAuth(`http://localhost:8000/recipe_likes/${likeId}`, {
+      method: "DELETE",
+    });
+
+    if (!deleteResponse.ok) {
+      const errorData = await deleteResponse.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to unlike recipe");
+    }
+
+    return true; // Successful unlike
+
+  } catch (error) {
+    console.error("Error in unlikeRecipe:", error);
+    throw error; // Re-throw the error so it can be handled by the calling function
+  }
+};
+
+export const checkRecipeLike = async (recipeId, userId) => {
+  const response = await fetchWithAuth(`http://localhost:8000/recipe_likes/check_like?recipe_id=${recipeId}&user_id=${userId}`);
+  const data = await response.json();
+  return {
+    isLiked: data.is_liked,
+    likeId: data.like_id  // Assuming the backend returns this
+  };
 };

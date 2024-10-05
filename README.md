@@ -8,6 +8,32 @@ Roll-for-Recipe will allow a user to create, read, update and delete recipes whi
 
 My aim is for this app to fix the time-gap between deciding on what to shop for and actually going to the grocery store with a dedicated list. It's created to give back some free time to busy people who like to cook and shop strategically.
 
+## Primary Learning Objectives
+
+Transition from vanilla JS to React, Implementing a CSS Framework (Bootstrap), Many-to-many relationships management, mobile-friendly UI/UX, solving a real-world problem with code
+
+## Example Walkthrough 
+
+   **Create Recipe**
+
+   ![Create-Recipe GIF](public/assets/Create-Recipe.gif)
+
+   **Update & Delete Recipe**
+
+   ![Edit-Delete-Recipe GIF](public/assets/Edit-Delete-Recipe.gif)
+
+   **Explore, Filter & Favorite Recipes**
+
+   ![Filter-Favorite GIF](public/assets/Filter-Favorite.gif)
+
+   **Roll for Recipe & Shopping List from Favorites**
+
+   ![Roll-Shopping-List GIF](public/assets/Roll-Shopping-List.gif)
+
+   **Update Profile**
+
+   ![Update-Profile GIF](public/assets/Update-Profile.gif)
+
 ## How to Set-up & Use
 
 <details>
@@ -40,22 +66,32 @@ My aim is for this app to fix the time-gap between deciding on what to shop for 
 </details>
 
 <details>
-  <summary>Set Up Instructions for Json-Server Database</summary>
+  <summary>Set Up Instructions for the Django/SQLite API</summary>
 
-1. Clone this repository:
-    ```bash
-    git clone git@github.com:MichaelGalo/Roll-For-Recipe-API.git
-    ```
+1. Clone the repository:
 
-2. Navigate into the project directory:
-    ```bash
-    cd your-repo
-    ```
+   ```bash
+   git clone https://github.com/MichaelGalo/recipe-api.git
+   cd roll-for-recipe
 
-3. Run Json-Server:
-    ```bash
-    json-server database.json -p 8088 --watch
-    ```
+2. Create the viritual environment: 
+
+    ```python
+    pipenv shell
+
+3. Install dependencies: 
+
+    ```python
+    pipenv install
+
+4. Apply migrations:
+
+    ```python
+    python manage.py migrate
+
+5. Run the development server:
+    ```python
+    python manage.py runserver
 
 </details>
 

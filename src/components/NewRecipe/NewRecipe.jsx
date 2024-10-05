@@ -84,7 +84,7 @@ export const NewRecipe = ({ currentUser }) => {
       favorites: (authorFavorite && 1) || 0,
       time,
       servings,
-      date: new Date().toLocaleDateString(),
+      date: new Date().toISOString().split('T')[0],
     };
 
     const recipeId = await addRecipe(newRecipe);

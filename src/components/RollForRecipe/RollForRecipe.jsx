@@ -13,25 +13,29 @@ export const RollForRecipe = ({ currentUser }) => {
   const [randomizedMeals, setRandomizedMeals] = useState([]);
   const [showRandomMeals, setShowRandomMeals] = useState(false);
   const { selectedMeals, addMeal, removeMeal } = useMealContext();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMeals = async () => {
-      const authorFavorites = await getFavoriteAuthorMealsByUserId(
-        currentUser.id
-      );
-      const nonAuthorFavorites = await getFavoriteNonAuthorMealsByUserId(
-        currentUser.id
-      );
-      const processedNonAuthorFavorites = nonAuthorFavorites.map(
-        (favorite) => favorite.recipe
-      );
+      if (!currentUser || !currentUser.id) {
+        setError("User information is missing. Please log in and try again.");
+        return;
+      }
 
-      const totalFavorites = [
-        ...authorFavorites,
-        ...processedNonAuthorFavorites,
-      ];
+      try {
+        const authorFavorites = await getFavoriteAuthorMealsByUserId(currentUser.id);
+        const nonAuthorFavorites = await getFavoriteNonAuthorMealsByUserId(currentUser.id);
 
-      setFavoriteMeals(totalFavorites);
+        if (!Array.isArray(authorFavorites) || !Array.isArray(nonAuthorFavorites)) {
+          throw new Error("Invalid response from server");
+        }
+
+        const totalFavorites = [...authorFavorites, ...nonAuthorFavorites];
+        setFavoriteMeals(totalFavorites);
+      } catch (err) {
+        console.error("Error fetching favorite meals:", err);
+        setError("Failed to fetch favorite meals. Please try again later.");
+      }
     };
     fetchMeals();
   }, [currentUser]);
