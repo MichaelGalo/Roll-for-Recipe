@@ -15,7 +15,6 @@ import { updateIngredientsForRecipe } from "../../services/ingredientsService";
 export const EditRecipe = ({ currentUser }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  // const [mealTypeId, setMealTypeId] = useState(0);
   const [mealType, setMealType] = useState("");
   const [categories, setCategories] = useState([]);
   const [authorFavorite, setAuthorFavorite] = useState(false);
@@ -25,6 +24,7 @@ export const EditRecipe = ({ currentUser }) => {
   const [ingredients, setIngredients] = useState([]);
   const { recipeId } = useParams();
   const [currentRecipe, setCurrentRecipe] = useState({});
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,11 +36,10 @@ export const EditRecipe = ({ currentUser }) => {
       setCurrentRecipe(recipe);
       setTitle(recipe.title);
       setBody(recipe.body);
-      // setMealTypeId(recipe.mealTypeId);
       setMealType(recipe.meal_type);
       setTime(recipe.time);
       setServings(recipe.servings);
-      setAuthorFavorite(recipe.authorFavorite);
+      setAuthorFavorite(recipe.author_favorite);
       setFavorites(recipe.favorites);
 
       const ingredientsData = await getIngredientsForRecipe(recipeId);
@@ -77,39 +76,56 @@ export const EditRecipe = ({ currentUser }) => {
   };
 
   const handleSave = async () => {
-  const formattedBody = body
-    .split("\n")
-    .map((line) => line.trim())
-    .join("\n");
+  try {
+    setError(null);
+    const formattedBody = body
+      .split("\n")
+      .map((line) => line.trim())
+      .join("\n");
 
-  const mealTypeId = categories.find(category => category.name === mealType)?.id;
+    const mealTypeId = categories.find(category => category.name === mealType)?.id;
 
-  const newRecipe = {
-    id: recipeId,
-    title: title,
-    body: formattedBody,
-    // mealTypeId: parseInt(mealTypeId),
-    mealTypeId: mealTypeId,
-    userId: currentUser.id,
-    authorFavorite: authorFavorite,
-    favorites: authorFavorite
-      ? currentRecipe.author_favorite
-        ? favorites
-        : favorites + 1
-      : currentRecipe.author_favorite
-      ? favorites - 1
-      : favorites,
-    time: time,
-    servings: servings,
-    date: new Date().toISOString().split('T')[0],
-  };
+    const newRecipe = {
+      id: recipeId,
+      title: title,
+      body: formattedBody,
+      mealTypeId: mealTypeId,
+      userId: currentUser.id,
+      authorFavorite: authorFavorite,
+      favorites: authorFavorite
+        ? currentRecipe.author_favorite
+          ? favorites
+          : favorites + 1
+        : currentRecipe.author_favorite
+        ? favorites - 1
+        : favorites,
+      time: time,
+      servings: servings,
+      date: new Date().toISOString().split('T')[0],
+    };
 
     const updatedRecipe = await updateRecipe(newRecipe);
-    await updateIngredientsForRecipe(recipeId, ingredients);
+
+    const ingredientsToUpdate = ingredients.filter(
+      ingredient => ingredient.ingredient_Id && ingredient.quantity
+    ).map(ingredient => ({
+      id: ingredient.id,
+      ingredient_Id: ingredient.ingredient_Id,
+      quantity: ingredient.quantity,
+    }));
+
+    const updatedIngredientsResponse = await updateIngredientsForRecipe(recipeId, ingredientsToUpdate);
+
+    // Fetch updated ingredients
     const updatedIngredients = await getIngredientsForRecipe(recipeId);
     setIngredients(updatedIngredients);
 
     navigate("/recipe-details/" + recipeId);
+  } catch (error) {
+    console.error("Error updating recipe:", error);
+    setError("Failed to update recipe. Please check the console for more details.");
+    // Don't navigate away if there's an error
+  }
   };
 
   return (
