@@ -1,4 +1,4 @@
-export const baseUrl = "https://recipe-client-lshi3.ondigitalocean.app/login"
+export const baseUrl = "https://recipe-api-xxizc.ondigitalocean.app"
 
 // Centralized fetch functions
 export const fetchWithAuth = (url, options = {}) => {
