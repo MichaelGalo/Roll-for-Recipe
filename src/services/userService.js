@@ -1,24 +1,24 @@
 import { fetchWithAuth, fetchWithoutAuth } from "./fetcher";
 
 export const getUserByEmail = async (email) => {
-  return await fetchWithoutAuth(`http://localhost:8000/users/?search=${email}`)
+  return await fetchWithoutAuth(`${baseUrl}/users/?search=${email}`)
     .then(res => res.json());
 };
 
 export const getUserById = async (id) => {
-  return await fetchWithAuth(`http://localhost:8000/users/${id}`)
+  return await fetchWithAuth(`${baseUrl}/users/${id}`)
     .then(res => res.json());
 };
 
 export const updateUser = async (user) => {
-  return await fetchWithAuth(`http://localhost:8000/users/${user.id}`, {
+  return await fetchWithAuth(`${baseUrl}/users/${user.id}`, {
     method: "PUT",
     body: JSON.stringify(user),
   }).then(res => res.json());
 };
 
 export const loginUser = (username, password) => {
-  return fetchWithoutAuth("http://localhost:8000/login", {
+  return fetchWithoutAuth(`${baseUrl}/login`, {
     method: "POST",
     body: JSON.stringify({ username, password })
   })
@@ -45,7 +45,7 @@ export const loginUser = (username, password) => {
 };
 
 export const createUser = (user) => {
-  return fetchWithoutAuth("http://localhost:8000/register", {
+  return fetchWithoutAuth(`${baseUrl}/register`, {
     method: "POST",
     body: JSON.stringify(user)
   })

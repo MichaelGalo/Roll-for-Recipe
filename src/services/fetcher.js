@@ -1,3 +1,5 @@
+export const baseUrl = "https://recipe-client-lshi3.ondigitalocean.app/login"
+
 // Centralized fetch functions
 export const fetchWithAuth = (url, options = {}) => {
     const token = localStorage.getItem("recipe_token");
