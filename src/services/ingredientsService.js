@@ -2,7 +2,7 @@ import { fetchWithAuth } from "./fetcher";
 import { getIngredientsForRecipe } from "./recipeService";
 
 export const fetchIngredients = async () => {
-  const response = await fetchWithAuth("http://localhost:8000/ingredients");
+  const response = await fetchWithAuth(`${baseUrl}/ingredients`);
   return response.json();
 };
 
@@ -22,7 +22,7 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
     )
     .map((ingredient) => {
       return fetchWithAuth(
-        `http://localhost:8000/ingredient_for_recipes/${ingredient.id}`,
+        `${baseUrl}/ingredient_for_recipes/${ingredient.id}`,
         {
           method: "DELETE",
         }
@@ -43,7 +43,7 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
 
     if (ingredient.id) {
       return fetchWithAuth(
-        `http://localhost:8000/ingredient_for_recipes/${ingredient.id}`,
+        `${baseUrl}/ingredient_for_recipes/${ingredient.id}`,
         {
           method: "PUT",
           headers: {
@@ -60,7 +60,7 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
         return { status: 'updated', id: ingredient.id };
       });
     } else {
-      return fetchWithAuth(`http://localhost:8000/ingredient_for_recipes`, {
+      return fetchWithAuth(`${baseUrl}/ingredient_for_recipes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export const updateIngredientsForRecipe = async (recipeId, ingredients) => {
 
 export const fetchGrocerySubtypeNames = async (subtypeIds) => {
   const subtypePromises = subtypeIds.map((id) =>
-    fetchWithAuth(`http://localhost:8000/grocery_subtypes/${id}`).then((response) =>
+    fetchWithAuth(`${baseUrl}/grocery_subtypes/${id}`).then((response) =>
       response.json()
     )
   );

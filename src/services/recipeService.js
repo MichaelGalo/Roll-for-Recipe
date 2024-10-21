@@ -2,33 +2,33 @@ import { fetchWithAuth } from "./fetcher";
 
 
 export const getAllRecipes = async () => {
-  const response = await fetchWithAuth("http://localhost:8000/recipes");
+  const response = await fetchWithAuth(`${baseUrl}/recipes`);
   return response.json();
 };
 
 
 export const getRecipesByUserId = async (userId) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipes?userId=${userId}`
+    `${baseUrl}/recipes?userId=${userId}`
   ).then((res) => res.json());
 };
 
 
 export const getRecipeById = async (id) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipes/${id}`
+    `${baseUrl}/recipes/${id}`
   ).then((res) => res.json());
 };
 
 export const updateRecipe = async (recipe) => {
-  return await fetchWithAuth(`http://localhost:8000/recipes/${recipe.id}`, {
+  return await fetchWithAuth(`${baseUrl}/recipes/${recipe.id}`, {
     method: "PUT",
     body: JSON.stringify(recipe),
   }).then((res) => res.json());
 };
 
 export const addRecipe = async (recipe) => {
-  const response = await fetchWithAuth("http://localhost:8000/recipes", {
+  const response = await fetchWithAuth(`${baseUrl}/recipes`, {
     method: "POST",
     body: JSON.stringify(recipe),
   });
@@ -46,7 +46,7 @@ export const addIngredients = async (recipeId, ingredients) => {
     }));
 
   const promises = formattedIngredients.map((ingredient) =>
-    fetchWithAuth(`http://localhost:8000/ingredient_for_recipes`, {
+    fetchWithAuth(`${baseUrl}/ingredient_for_recipes`, {
       method: "POST",
       body: JSON.stringify(ingredient),
     })
@@ -58,7 +58,7 @@ export const addIngredients = async (recipeId, ingredients) => {
 
 export const getIngredientsForRecipe = async (recipeId) => {
   const response = await fetchWithAuth(
-    `http://localhost:8000/ingredient_for_recipes?recipe_id=${recipeId}&_expand=ingredient`
+    `${baseUrl}/ingredient_for_recipes?recipe_id=${recipeId}&_expand=ingredient`
   );
   return response.json();
 };
@@ -67,13 +67,13 @@ export const deleteRecipe = async (id) => {
   try {
     const ingredients = await getIngredientsForRecipe(id);
     const deletePromises = ingredients.map((ingredient) =>
-      fetchWithAuth(`http://localhost:8000/ingredient_for_recipes/${ingredient.id}`, {
+      fetchWithAuth(`${baseUrl}/ingredient_for_recipes/${ingredient.id}`, {
         method: "DELETE",
       })
     );
     await Promise.all(deletePromises);
 
-    const recipeResponse = await fetchWithAuth(`http://localhost:8000/recipes/${id}`, {
+    const recipeResponse = await fetchWithAuth(`${baseUrl}/recipes/${id}`, {
       method: "DELETE",
     });
 
@@ -92,18 +92,18 @@ export const deleteRecipe = async (id) => {
 
 export const getFavoriteAuthorMealsByUserId = async (userId) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipes/favorites?userId=${userId}&authorFavorite=true`
+    `${baseUrl}/recipes/favorites?userId=${userId}&authorFavorite=true`
   ).then((res) => res.json());
 };
 
 export const getFavoriteNonAuthorMealsByUserId = async (userId) => {
   return await fetchWithAuth(
-    `http://localhost:8000/recipes/favorites?userId=${userId}`
+    `${baseUrl}/recipes/favorites?userId=${userId}`
   ).then((res) => res.json());
 };
 
 export const likeRecipe = async (recipeId, userId) => {
-  const newLike = await fetchWithAuth(`http://localhost:8000/recipe_likes`, {
+  const newLike = await fetchWithAuth(`${baseUrl}/recipe_likes`, {
     method: "POST",
     body: JSON.stringify({ recipe_Id: recipeId, user_Id: userId }),
   }).then((res) => res.json());
@@ -121,7 +121,7 @@ export const likeRecipe = async (recipeId, userId) => {
 
 export const unlikeRecipe = async (likeId) => {
   try {
-    const deleteResponse = await fetchWithAuth(`http://localhost:8000/recipe_likes/${likeId}`, {
+    const deleteResponse = await fetchWithAuth(`${baseUrl}/recipe_likes/${likeId}`, {
       method: "DELETE",
     });
 
@@ -139,7 +139,7 @@ export const unlikeRecipe = async (likeId) => {
 };
 
 export const checkRecipeLike = async (recipeId, userId) => {
-  const response = await fetchWithAuth(`http://localhost:8000/recipe_likes/check_like?recipe_id=${recipeId}&user_id=${userId}`);
+  const response = await fetchWithAuth(`${baseUrl}/recipe_likes/check_like?recipe_id=${recipeId}&user_id=${userId}`);
   const data = await response.json();
   return {
     isLiked: data.is_liked,
