@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "./fetcher";
+import { baseUrl, fetchWithAuth } from "./fetcher";
 import { getIngredientsForRecipe } from "./recipeService";
 
 export const fetchIngredients = async () => {

@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "./fetcher";
+import { baseUrl, fetchWithAuth } from "./fetcher";
 
 export const getMealCategories = async () => {
   return await fetchWithAuth(`${baseUrl}/meal_types`)
