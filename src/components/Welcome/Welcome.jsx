@@ -7,7 +7,7 @@ export const Welcome = () => {
 
   return (
     <div className="welcome">
-      <img src="src/assets/Chef.png" alt="chef" />
+      <img src="public/assets/Chef.png" alt="chef" />
       <h1>Welcome to Roll for Recipe!</h1>
       <h2>A social app for the home chef.</h2>
       <h3>
