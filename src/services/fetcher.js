@@ -1,24 +1,24 @@
-export const baseUrl = "https://recipe-api-xxizc.ondigitalocean.app"
+export const baseUrl = "http://localhost:8000";
 
 // Centralized fetch functions
 export const fetchWithAuth = (url, options = {}) => {
-    const token = localStorage.getItem("recipe_token");
-    return fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        "Authorization": `Token ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-  };
-  
+  const token = localStorage.getItem("recipe_token");
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Token ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 export const fetchWithoutAuth = (url, options = {}) => {
-    return fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        "Content-Type": "application/json"
-      }
-    });
-  };
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      "Content-Type": "application/json",
+    },
+  });
+};
